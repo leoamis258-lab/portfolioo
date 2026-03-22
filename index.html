@@ -122,6 +122,91 @@
     .skill-pill:hover { border-color: var(--accent-a); background: rgba(110,142,255,0.10); transform: scale(1.06); }
     .pill-icon { font-size: 17px; line-height: 1; }
 
+
+    /* ===== PARALLAX & SCROLL FX ===== */
+
+    /* Scroll progress bar */
+    #scroll-progress {
+      position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+      background: linear-gradient(90deg, var(--accent-a), var(--accent-b), var(--accent-c));
+      z-index: 9999; transition: width 0.05s linear;
+      box-shadow: 0 0 8px var(--accent-a);
+    }
+
+    /* Hero zoom layer — scales down as you scroll */
+    #hero-zoom {
+      position: absolute; inset: 0; z-index: 0;
+      transform-origin: center center;
+      will-change: transform;
+    }
+
+    /* Parallax depth layers */
+    .px-layer { will-change: transform; }
+
+    /* Section entrance — slides + fades from below */
+    .px-section-title {
+      opacity: 0;
+      transform: translateY(60px);
+      transition: opacity 0.9s cubic-bezier(.22,1,.36,1), transform 0.9s cubic-bezier(.22,1,.36,1);
+    }
+    .px-section-title.in-view { opacity: 1; transform: translateY(0); }
+
+    /* Cards tilt on mouse move */
+    .tilt-card { transform-style: preserve-3d; transition: transform 0.1s ease-out; }
+
+    /* Sticky section zoom panels */
+    .zoom-panel {
+      position: relative;
+      overflow: hidden;
+    }
+    .zoom-panel-inner {
+      will-change: transform;
+      transform-origin: center center;
+    }
+
+    /* Floating depth badges parallax */
+    .depth-badge { will-change: transform; }
+
+    /* Section divider wave */
+    .wave-divider {
+      position: relative; overflow: hidden;
+      height: 80px; margin-bottom: -2px;
+    }
+    .wave-divider svg { position: absolute; bottom: 0; width: 100%; }
+
+    /* Horizontal scroll text marquee  */
+    .scroll-text-row {
+      overflow: hidden; white-space: nowrap;
+      padding: 24px 0;
+      border-top: 1px solid var(--glass-border);
+      border-bottom: 1px solid var(--glass-border);
+      background: var(--bg-secondary);
+    }
+    .scroll-text-inner {
+      display: inline-block;
+      animation: scroll-text 18s linear infinite;
+      font-size: clamp(28px, 4vw, 52px);
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      color: transparent;
+      -webkit-text-stroke: 1px var(--glass-border);
+      letter-spacing: 0.04em;
+    }
+    .scroll-text-inner span { color: var(--accent-a); -webkit-text-stroke: 0; }
+    @keyframes scroll-text {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* Zoom-in on scroll for about image */
+    .about-img-wrap {
+      overflow: hidden; border-radius: 18px;
+    }
+    .about-img-wrap img {
+      will-change: transform;
+      transition: transform 0.05s linear;
+    }
+
     @media (max-width: 640px) { .orb { display: none; } }
 
     /* === MODAL === */
@@ -211,6 +296,7 @@
   </style>
 </head>
 <body class="noise">
+<div id="scroll-progress"></div>
 <script>
   // Ensure all .reveal elements are visible immediately (iframe-safe fallback)
   (function() {
@@ -261,11 +347,11 @@
 
 <!-- HERO -->
 <section id="hero" style="min-height:100vh;position:relative;display:flex;align-items:center;padding-top:80px;">
-  <div class="hero-mesh">
+  <div id="hero-zoom"><div class="hero-mesh">
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
-  </div>
+  </div></div>
   <div style="position:absolute;inset:0;z-index:1;background-image:linear-gradient(rgba(110,142,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(110,142,255,0.04) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;"></div>
   <div class="max-w-6xl mx-auto px-6 py-24 relative z-10 w-full">
     <div class="flex flex-col lg:flex-row items-center gap-16">
@@ -313,13 +399,21 @@
   </div>
 </section>
 
+
+<!-- SCROLL TEXT DIVIDER -->
+<div class="scroll-text-row">
+  <div class="scroll-text-inner">
+    FULL-STACK DEVELOPER &nbsp;·&nbsp; <span>UI DESIGNER</span> &nbsp;·&nbsp; OPEN SOURCE &nbsp;·&nbsp; FULL-STACK DEVELOPER &nbsp;·&nbsp; <span>UI DESIGNER</span> &nbsp;·&nbsp; OPEN SOURCE &nbsp;·&nbsp; FULL-STACK DEVELOPER &nbsp;·&nbsp; <span>UI DESIGNER</span> &nbsp;·&nbsp; OPEN SOURCE &nbsp;·&nbsp;
+  </div>
+</div>
+
 <!-- ABOUT -->
 <section id="about" style="padding:120px 0;position:relative;">
   <div class="max-w-6xl mx-auto px-6">
     <div class="flex flex-col lg:flex-row gap-16 items-center">
       <div class="flex-shrink-0 reveal">
         <div class="glass" style="padding:10px;border-radius:24px;max-width:360px;position:relative;">
-          <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=720&q=80" alt="Developer workspace" width="360" height="440" style="object-fit:cover;border-radius:16px;width:100%;display:block;" loading="lazy"/>
+          <div class="about-img-wrap"><img id="about-img" src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=720&q=80" alt="Developer workspace" width="360" height="440" style="object-fit:cover;border-radius:16px;width:100%;display:block;" loading="lazy"/></div>
           <div class="glass" style="position:absolute;bottom:-24px;right:-24px;padding:16px 20px;border-radius:16px;">
             <div style="font-size:28px;font-weight:800;">100<span class="grad-text">%</span></div>
             <div style="font-size:12px;color:var(--text-secondary);">Client Satisfaction</div>
@@ -328,7 +422,7 @@
       </div>
       <div class="flex-1 reveal stagger-2">
         <p class="section-label mb-4">About Me</p>
-        <h2 class="text-4xl md:text-5xl font-black mb-6" style="line-height:1.1;">A developer who<br/><span class="grad-text">thinks in design.</span></h2>
+        <h2 class="text-4xl md:text-5xl font-black px-section-title mb-6" style="line-height:1.1;">A developer who<br/><span class="grad-text">thinks in design.</span></h2>
         <p class="mb-5" style="color:var(--text-secondary);line-height:1.8;font-size:16px;">I'm Alex Rivera, a passionate full-stack developer based in San Francisco with over 6 years of experience building products for the web. My work lives at the intersection of elegant code and thoughtful UX.</p>
         <p class="mb-8" style="color:var(--text-secondary);line-height:1.8;font-size:16px;">I've worked with startups, agencies, and Fortune 500 companies — shipping everything from real-time dashboards to consumer mobile apps. I believe great software is invisible: it solves problems so elegantly that people forget the complexity behind it.</p>
         <div class="flex flex-wrap gap-6 mb-10">
@@ -351,7 +445,7 @@
   <div class="max-w-6xl mx-auto px-6 relative z-10">
     <div class="text-center mb-16 reveal">
       <p class="section-label mb-4">What I Do</p>
-      <h2 class="text-4xl md:text-5xl font-black">Skills &amp; <span class="grad-text">Expertise</span></h2>
+      <h2 class="text-4xl md:text-5xl font-black px-section-title">Skills &amp; <span class="grad-text">Expertise</span></h2>
       <p style="color:var(--text-secondary);margin-top:12px;font-size:15px;">Technologies I work with every day</p>
     </div>
   </div>
@@ -386,7 +480,7 @@
   <div class="max-w-6xl mx-auto px-6">
     <div class="text-center mb-16 reveal">
       <p class="section-label mb-4">Selected Work</p>
-      <h2 class="text-4xl md:text-5xl font-black">Recent <span class="grad-text">Projects</span></h2>
+      <h2 class="text-4xl md:text-5xl font-black px-section-title">Recent <span class="grad-text">Projects</span></h2>
       <p style="color:var(--text-secondary);margin-top:10px;font-size:15px;">Click any card to learn more</p>
     </div>
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -503,7 +597,7 @@
 
     <div class="text-center mb-16 reveal">
       <p class="section-label mb-4">Background</p>
-      <h2 class="text-4xl md:text-5xl font-black">Education &amp; <span class="grad-text">Achievements</span></h2>
+      <h2 class="text-4xl md:text-5xl font-black px-section-title">Education &amp; <span class="grad-text">Achievements</span></h2>
       <p style="color:var(--text-secondary);margin-top:10px;font-size:15px;">Academic milestones, school activities &amp; certifications</p>
     </div>
 
@@ -720,7 +814,7 @@
   <div class="max-w-4xl mx-auto px-6 relative z-10">
     <div class="text-center mb-16 reveal">
       <p class="section-label mb-4">Get in Touch</p>
-      <h2 class="text-4xl md:text-5xl font-black">Let's build something <span class="grad-text">amazing.</span></h2>
+      <h2 class="text-4xl md:text-5xl font-black px-section-title">Let's build something <span class="grad-text">amazing.</span></h2>
       <p style="color:var(--text-secondary);font-size:16px;max-width:500px;margin:16px auto 0;line-height:1.7;">Whether it's a new project, a collaboration, or just a hello — my inbox is always open.</p>
     </div>
     <div class="glass p-10 md:p-14 reveal stagger-1">
@@ -737,7 +831,7 @@
       </div>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8 reveal stagger-2">
-      <div class="glass p-6 text-center" style="border-radius:16px;"><div style="color:var(--accent-a);margin-bottom:8px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto;display:block;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">Email</div><div style="font-size:14px;font-weight:600;">hello@alexrivera.dev</div></div>
+      <div class="glass p-6 text-center" style="border-radius:16px;"><div style="color:var(--accent-a);margin-bottom:8px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto;display:block;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">Email</div><div style="font-size:14px;font-weight:600;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f69e939a9a99b6979a938e849f80938497d8929380">[email&#160;protected]</a></div></div>
       <div class="glass p-6 text-center" style="border-radius:16px;"><div style="color:var(--accent-b);margin-bottom:8px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto;display:block;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">Location</div><div style="font-size:14px;font-weight:600;">San Francisco, CA</div></div>
       <div class="glass p-6 text-center" style="border-radius:16px;"><div style="color:var(--accent-c);margin-bottom:8px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto;display:block;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">Availability</div><div style="font-size:14px;font-weight:600;">Open to Projects</div></div>
     </div>
@@ -756,34 +850,138 @@
 </footer>
 
 
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script>
 (function() {
+  'use strict';
+
   // ── THEME TOGGLE ─────────────────────────────────────────────────────────
   var html = document.documentElement;
-
-  // Apply saved theme immediately (before paint)
-  var saved = localStorage.getItem('theme');
-  if (saved === 'light') html.classList.add('light');
+  if (localStorage.getItem('theme') === 'light') html.classList.add('light');
 
   function applyTheme(isLight) {
-    if (isLight) {
-      html.classList.add('light');
-      localStorage.setItem('theme', 'light');
-    } else {
-      html.classList.remove('light');
-      localStorage.setItem('theme', 'dark');
+    isLight ? html.classList.add('light') : html.classList.remove('light');
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  }
+
+  // ── SCROLL ENGINE ─────────────────────────────────────────────────────────
+  // Single rAF loop drives ALL scroll-based effects
+  var scrollY = 0;
+  var ticking = false;
+
+  function onScroll() {
+    scrollY = window.scrollY;
+    if (!ticking) {
+      requestAnimationFrame(runScrollEffects);
+      ticking = true;
     }
   }
 
-  document.addEventListener('DOMContentLoaded', function() {
-    var btn = document.getElementById('themeToggle');
-    if (btn) {
-      btn.addEventListener('click', function() {
-        applyTheme(!html.classList.contains('light'));
-      });
+  function runScrollEffects() {
+    ticking = false;
+    var docH = document.documentElement.scrollHeight - window.innerHeight;
+
+    // 1. Progress bar
+    var pct = docH > 0 ? (scrollY / docH) * 100 : 0;
+    var pb = document.getElementById('scroll-progress');
+    if (pb) pb.style.width = pct + '%';
+
+    // 2. Hero zoom-out (scales from 1 → 0.88 as you scroll down)
+    var heroZoom = document.getElementById('hero-zoom');
+    if (heroZoom) {
+      var heroH = document.getElementById('hero').offsetHeight || window.innerHeight;
+      var progress = Math.min(scrollY / heroH, 1);
+      var scale = 1 - progress * 0.12;
+      var fade  = 1 - progress * 0.7;
+      heroZoom.style.transform = 'scale(' + scale + ')';
+      heroZoom.style.opacity   = Math.max(fade, 0);
     }
 
-    // ── MOBILE MENU ───────────────────────────────────────────────────────
+    // 3. Orb parallax (different speeds + directions)
+    var orb1 = document.querySelector('.orb-1');
+    var orb2 = document.querySelector('.orb-2');
+    var orb3 = document.querySelector('.orb-3');
+    if (orb1) orb1.style.transform = 'translateY(' + (scrollY * 0.18) + 'px) scale(1)';
+    if (orb2) orb2.style.transform = 'translateY(' + (scrollY * -0.10) + 'px) scale(1)';
+    if (orb3) orb3.style.transform = 'translateY(' + (scrollY * 0.07) + 'px) scale(1)';
+
+    // 4. Hero headline depth
+    var h1 = document.querySelector('#hero h1');
+    var hp = document.querySelector('#hero p');
+    if (h1) h1.style.transform = 'translateY(' + (scrollY * 0.06) + 'px)';
+    if (hp) hp.style.transform  = 'translateY(' + (scrollY * 0.04) + 'px)';
+
+    // 5. Floating badges counter-parallax
+    var badges = document.querySelectorAll('.depth-badge');
+    badges.forEach(function(b, i) {
+      var dir = i % 2 === 0 ? -1 : 1;
+      b.style.transform = 'translateY(' + (scrollY * 0.05 * dir) + 'px)';
+    });
+
+    // 6. About image zoom-in on scroll
+    var aboutImg = document.getElementById('about-img');
+    if (aboutImg) {
+      var aboutSec = document.getElementById('about');
+      if (aboutSec) {
+        var rect = aboutSec.getBoundingClientRect();
+        var prog = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / (window.innerHeight + rect.height)));
+        var imgScale = 1 + prog * 0.08;
+        aboutImg.style.transform = 'scale(' + imgScale + ')';
+      }
+    }
+
+    // 7. Section title reveals with parallax depth
+    document.querySelectorAll('.px-section-title').forEach(function(el) {
+      var r = el.getBoundingClientRect();
+      var inView = r.top < window.innerHeight * 0.85;
+      if (inView) {
+        el.classList.add('in-view');
+        // slight float up as you pass through
+        var drift = Math.max(0, (window.innerHeight * 0.5 - r.top) * 0.04);
+        el.style.transform = 'translateY(-' + drift + 'px)';
+      }
+    });
+
+    // 8. Glass cards subtle float
+    document.querySelectorAll('.project-card').forEach(function(card) {
+      var r = card.getBoundingClientRect();
+      if (r.top < window.innerHeight && r.bottom > 0) {
+        var relY = (r.top - window.innerHeight * 0.5) * 0.015;
+        // only apply float if not being hovered (hover transform takes priority)
+        if (!card.matches(':hover')) {
+          card.style.setProperty('--float-y', relY + 'px');
+        }
+      }
+    });
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // ── MOUSE TILT for cards ─────────────────────────────────────────────────
+  function addTilt(selector) {
+    document.querySelectorAll(selector).forEach(function(card) {
+      card.addEventListener('mousemove', function(e) {
+        var r = card.getBoundingClientRect();
+        var x = (e.clientX - r.left) / r.width  - 0.5;
+        var y = (e.clientY - r.top)  / r.height - 0.5;
+        card.style.transform = 'perspective(800px) rotateY(' + (x * 8) + 'deg) rotateX(' + (-y * 8) + 'deg) scale(1.02) translateY(-6px)';
+      });
+      card.addEventListener('mouseleave', function() {
+        card.style.transform = '';
+      });
+    });
+  }
+
+  // ── DOM READY ─────────────────────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', function() {
+
+    // Theme toggle
+    var btn = document.getElementById('themeToggle');
+    if (btn) btn.addEventListener('click', function() {
+      applyTheme(!html.classList.contains('light'));
+    });
+
+    // Mobile menu
     var menuBtn = document.getElementById('menuBtn');
     var mobileMenu = document.getElementById('mobileMenu');
     if (menuBtn && mobileMenu) {
@@ -792,11 +990,10 @@
       });
     }
 
-    // ── SMOOTH SCROLL ─────────────────────────────────────────────────────
+    // Smooth scroll
     document.querySelectorAll('a[href^="#"]').forEach(function(a) {
       a.addEventListener('click', function(e) {
-        var id = a.getAttribute('href');
-        var target = document.querySelector(id);
+        var target = document.querySelector(a.getAttribute('href'));
         if (target) {
           e.preventDefault();
           target.scrollIntoView({ behavior: 'smooth' });
@@ -805,48 +1002,45 @@
       });
     });
 
-    // ── MARQUEE ───────────────────────────────────────────────────────────
+    // Tilt on project + edu cards
+    addTilt('.project-card');
+    addTilt('.cert-card');
+
+    // Section title initial check (in case already visible on load)
+    document.querySelectorAll('.px-section-title').forEach(function(el) {
+      var r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight * 0.85) el.classList.add('in-view');
+    });
+
+    // Run once on load
+    onScroll();
+
+    // ── MARQUEE ─────────────────────────────────────────────────────────────
     var R1 = [
-      { icon: '⚛', label: 'React' },
-      { icon: '▲', label: 'Next.js' },
-      { icon: '🔷', label: 'TypeScript' },
-      { icon: '🎨', label: 'Tailwind CSS' },
-      { icon: '🌐', label: 'Three.js' },
-      { icon: '🖼', label: 'Figma' },
-      { icon: '🔥', label: 'Vite' },
-      { icon: '📦', label: 'Webpack' },
-      { icon: '🧪', label: 'Vitest' },
-      { icon: '🎭', label: 'Playwright' }
+      { icon: '⚛️',  label: 'React' },      { icon: '▲',   label: 'Next.js' },
+      { icon: '🔷',  label: 'TypeScript' }, { icon: '🎨',  label: 'Tailwind CSS' },
+      { icon: '🌐',  label: 'Three.js' },   { icon: '🖼️',  label: 'Figma' },
+      { icon: '🔥',  label: 'Vite' },       { icon: '📦',  label: 'Webpack' },
+      { icon: '🧪',  label: 'Vitest' },     { icon: '🎭',  label: 'Playwright' }
     ];
     var R2 = [
-      { icon: '🟢', label: 'Node.js' },
-      { icon: '🐍', label: 'Python' },
-      { icon: '🐘', label: 'PostgreSQL' },
-      { icon: '🔴', label: 'Redis' },
-      { icon: '📡', label: 'GraphQL' },
-      { icon: '🐳', label: 'Docker' },
-      { icon: '☁️', label: 'AWS' },
-      { icon: '🚀', label: 'Vercel' },
-      { icon: '⚡', label: 'FastAPI' },
-      { icon: '🔗', label: 'Prisma' }
+      { icon: '🟢',  label: 'Node.js' },    { icon: '🐍',  label: 'Python' },
+      { icon: '🐘',  label: 'PostgreSQL' }, { icon: '🔴',  label: 'Redis' },
+      { icon: '📡',  label: 'GraphQL' },    { icon: '🐳',  label: 'Docker' },
+      { icon: '☁️',  label: 'AWS' },        { icon: '🚀',  label: 'Vercel' },
+      { icon: '⚡',  label: 'FastAPI' },    { icon: '🔗',  label: 'Prisma' }
     ];
     var R3 = [
-      { icon: '🤖', label: 'OpenAI API' },
-      { icon: '💳', label: 'Stripe' },
-      { icon: '📊', label: 'D3.js' },
-      { icon: '🗄️', label: 'Supabase' },
-      { icon: '🦀', label: 'Rust' },
-      { icon: '📱', label: 'React Native' },
-      { icon: '🔧', label: 'GitHub Actions' },
-      { icon: '📚', label: 'Storybook' },
-      { icon: '🏎️', label: 'Turborepo' },
-      { icon: '🌊', label: 'Framer Motion' }
+      { icon: '🤖',  label: 'OpenAI API' }, { icon: '💳',  label: 'Stripe' },
+      { icon: '📊',  label: 'D3.js' },      { icon: '🗄️',  label: 'Supabase' },
+      { icon: '🦀',  label: 'Rust' },       { icon: '📱',  label: 'React Native' },
+      { icon: '🔧',  label: 'GitHub Actions' }, { icon: '📚', label: 'Storybook' },
+      { icon: '🏎️', label: 'Turborepo' },   { icon: '🌊',  label: 'Framer Motion' }
     ];
 
     function buildMarquee(id, items) {
       var el = document.getElementById(id);
       if (!el) return;
-      // triple duplicate for seamless infinite loop
       var all = items.concat(items).concat(items);
       el.innerHTML = all.map(function(s) {
         return '<div class="skill-pill"><span class="pill-icon">' + s.icon + '</span>' + s.label + '</div>';
@@ -857,58 +1051,30 @@
     buildMarquee('mq2', R2);
     buildMarquee('mq3', R3);
 
-    // ── PARALLAX ──────────────────────────────────────────────────────────
-    var pts = [
-      { el: document.querySelector('.orb-1'), speed: 0.12 },
-      { el: document.querySelector('.orb-2'), speed: -0.08 },
-      { el: document.querySelector('.orb-3'), speed: 0.06 },
-      { el: document.querySelector('#hero h1'), speed: 0.04 }
-    ].filter(function(t) { return t.el; });
-
-    var ticking = false;
-    window.addEventListener('scroll', function() {
-      if (!ticking) {
-        requestAnimationFrame(function() {
-          var y = window.scrollY;
-          pts.forEach(function(p) {
-            p.el.style.transform = 'translateY(' + (y * p.speed) + 'px)';
-          });
-          ticking = false;
-        });
-        ticking = true;
-      }
-    }, { passive: true });
-
-    // ── CONTACT FORM ──────────────────────────────────────────────────────
+    // ── CONTACT FORM ─────────────────────────────────────────────────────────
     var sendBtn = document.getElementById('sendBtn');
     if (sendBtn) {
       sendBtn.addEventListener('click', function() {
-        var name  = (document.getElementById('fname')   || {}).value || '';
-        var email = (document.getElementById('femail')  || {}).value || '';
-        var msg   = (document.getElementById('fmsg')    || {}).value || '';
+        var name  = (document.getElementById('fname')  || {}).value || '';
+        var email = (document.getElementById('femail') || {}).value || '';
+        var msg   = (document.getElementById('fmsg')   || {}).value || '';
         if (!name.trim() || !email.trim() || !msg.trim()) {
-          alert('Please fill in name, email and message.');
-          return;
+          alert('Please fill in name, email and message.'); return;
         }
-        sendBtn.textContent = 'Sending…';
-        sendBtn.disabled = true;
+        sendBtn.textContent = 'Sending\u2026'; sendBtn.disabled = true;
         setTimeout(function() {
           var ok = document.getElementById('successMsg');
           if (ok) ok.style.display = 'block';
           ['fname','femail','fsubject','fmsg'].forEach(function(id) {
-            var el = document.getElementById(id);
-            if (el) el.value = '';
+            var e = document.getElementById(id); if (e) e.value = '';
           });
-          sendBtn.textContent = 'Send Message';
-          sendBtn.disabled = false;
-          setTimeout(function() {
-            if (ok) ok.style.display = 'none';
-          }, 4000);
+          sendBtn.textContent = 'Send Message'; sendBtn.disabled = false;
+          setTimeout(function() { if (ok) ok.style.display = 'none'; }, 4000);
         }, 1200);
       });
     }
 
-    // ── REVEAL ON SCROLL ──────────────────────────────────────────────────
+    // ── REVEAL ON SCROLL ─────────────────────────────────────────────────────
     if ('IntersectionObserver' in window) {
       var io = new IntersectionObserver(function(entries) {
         entries.forEach(function(e) {
@@ -1001,8 +1167,7 @@
       return '<div class="modal-feature"><div class="modal-feat-icon">' + f.icon + '</div>' +
              '<p style="font-size:14px;color:var(--text-secondary);line-height:1.6;">' + f.text + '</p></div>';
     }).join('');
-    var bd = document.getElementById('projModal');
-    bd.classList.add('open');
+    document.getElementById('projModal').classList.add('open');
     document.body.style.overflow = 'hidden';
   };
 
@@ -1015,25 +1180,7 @@
     if (e.target === document.getElementById('projModal')) window.closeModal();
   };
 
-  window.sendMessage = function() {
-    var name  = (document.getElementById('fname')  || {}).value || '';
-    var email = (document.getElementById('femail') || {}).value || '';
-    var msg   = (document.getElementById('fmsg')   || {}).value || '';
-    if (!name.trim() || !email.trim() || !msg.trim()) {
-      alert('Please fill in name, email and message.'); return;
-    }
-    var btn = document.getElementById('sendBtn');
-    btn.textContent = 'Sending…'; btn.disabled = true;
-    setTimeout(function() {
-      var ok = document.getElementById('successMsg');
-      if (ok) ok.style.display = 'block';
-      ['fname','femail','fsubject','fmsg'].forEach(function(id) {
-        var el = document.getElementById(id); if (el) el.value = '';
-      });
-      btn.textContent = 'Send Message'; btn.disabled = false;
-      setTimeout(function() { if (ok) ok.style.display = 'none'; }, 4000);
-    }, 1200);
-  };
+  window.sendMessage = function() { document.getElementById('sendBtn').click(); };
 
   window.closeMobile = function() {
     var m = document.getElementById('mobileMenu');
