@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Personal portfolio of Alex Rivera — Full-Stack Developer & UI Designer crafting beautiful digital experiences." />
+  <meta name="keywords" content="portfolio, developer, designer, full-stack, UI/UX" />
+  <meta name="author" content="Alex Rivera" />
+  <meta property="og:title" content="Alex Rivera — Developer & Designer" />
+  <meta property="og:description" content="Personal portfolio showcasing projects, skills, and creative work." />
+  <meta property="og:type" content="website" />
+  <title>Alex Rivera — Developer & Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg-primary: #0a0a14;
+      --bg-secondary: #11111e;
+      --glass-bg: rgba(255,255,255,0.04);
+      --glass-border: rgba(255,255,255,0.10);
+      --glass-shadow: rgba(0,0,0,0.35);
+      --accent-a: #6e8eff;
+      --accent-b: #00c6ff;
+      --accent-c: #39ffd1;
+      --text-primary: #f0eeff;
+      --text-secondary: #9992bb;
+      --nav-blur: rgba(10,10,20,0.75);
+    }
+    .light {
+      --bg-primary: #eef1ff;
+      --bg-secondary: #e2e7ff;
+      --glass-bg: rgba(255,255,255,0.60);
+      --glass-border: rgba(110,142,255,0.20);
+      --glass-shadow: rgba(80,100,200,0.10);
+      --text-primary: #111827;
+      --text-secondary: #4b5563;
+      --nav-blur: rgba(238,241,255,0.85);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; }
+    html { background: var(--bg-primary); transition: background 0.4s; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg-primary); color: var(--text-primary); overflow-x: hidden; transition: background 0.4s, color 0.4s; }
+    h1, h2, h3 { font-family: 'Playfair Display', serif; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-primary); }
+    ::-webkit-scrollbar-thumb { background: var(--accent-a); border-radius: 3px; }
+
+    .glass { background: var(--glass-bg); border: 1px solid var(--glass-border); box-shadow: 0 8px 32px var(--glass-shadow); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-radius: 20px; transition: background 0.4s, border 0.4s; }
+    .glass:hover { border-color: var(--accent-a); }
+
+    nav { background: var(--nav-blur); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); position: fixed; top: 0; left: 0; right: 0; z-index: 100; transition: background 0.4s; }
+
+    .hero-mesh { position: absolute; inset: 0; z-index: 0; background: var(--bg-primary); overflow: hidden; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.35; animation: drift 12s ease-in-out infinite; will-change: transform; }
+    .orb-1 { width: 480px; height: 480px; background: #3a5cff; top: -100px; left: -80px; animation-delay: 0s; }
+    .orb-2 { width: 400px; height: 400px; background: #00b4d8; top: 40%; right: -60px; animation-delay: -4s; }
+    .orb-3 { width: 320px; height: 320px; background: #00ffd5; bottom: -60px; left: 35%; animation-delay: -8s; }
+    @keyframes drift { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(30px,-40px) scale(1.05); } 66% { transform: translate(-20px,25px) scale(0.95); } }
+
+    .cursor { display: inline-block; width: 3px; height: 1.1em; background: var(--accent-a); margin-left: 2px; vertical-align: text-bottom; animation: blink 0.8s step-end infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    .reveal { opacity: 1; transform: translateY(0); transition: opacity 0.7s ease, transform 0.7s ease; }
+    
+    .stagger-1 { transition-delay: 0.10s; } .stagger-2 { transition-delay: 0.20s; } .stagger-3 { transition-delay: 0.30s; } .stagger-4 { transition-delay: 0.40s; } .stagger-5 { transition-delay: 0.50s; }
+
+    .toggle-btn { width: 52px; height: 28px; border-radius: 14px; background: var(--accent-a); position: relative; cursor: pointer; border: none; outline: none; transition: background 0.3s; }
+    .toggle-thumb { position: absolute; top: 4px; left: 4px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform 0.3s; }
+    .light .toggle-thumb { transform: translateX(24px); }
+
+    .form-input { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-primary); border-radius: 12px; padding: 14px 18px; width: 100%; font-family: 'DM Sans', sans-serif; font-size: 15px; outline: none; transition: border-color 0.25s, box-shadow 0.25s; resize: vertical; }
+    .form-input::placeholder { color: var(--text-secondary); }
+    .form-input:focus { border-color: var(--accent-a); box-shadow: 0 0 0 3px rgba(110,142,255,0.18); }
+
+    .grad-text { background: linear-gradient(135deg, var(--accent-a) 0%, var(--accent-b) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .section-label { font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-a); font-weight: 500; }
+
+    .nav-link { color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 500; position: relative; padding-bottom: 2px; transition: color 0.2s; }
+    .nav-link::after { content:''; position:absolute; bottom:0; left:0; right:0; height:1.5px; background:var(--accent-a); transform:scaleX(0); transform-origin:left; transition:transform 0.25s; }
+    .nav-link:hover { color: var(--text-primary); }
+    .nav-link:hover::after { transform: scaleX(1); }
+
+    .noise::before { content:''; position:fixed; inset:0; z-index:200; pointer-events:none; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E"); opacity:0.4; }
+
+    .cta-btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 32px; border-radius: 50px; background: linear-gradient(135deg, var(--accent-a), var(--accent-b)); color: #fff; font-weight: 600; font-size: 15px; text-decoration: none; border: none; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 24px rgba(110,142,255,0.35); }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(110,142,255,0.5); }
+    .cta-btn-outline { display: inline-flex; align-items: center; gap: 10px; padding: 13px 30px; border-radius: 50px; border: 1.5px solid var(--accent-a); color: var(--accent-a); background: transparent; font-weight: 600; font-size: 15px; text-decoration: none; cursor: pointer; transition: background 0.2s, color 0.2s; }
+    .cta-btn-outline:hover { background: var(--accent-a); color: #fff; }
+
+    .tag { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--glass-border); color: var(--accent-c); background: rgba(57,255,209,0.07); }
+
+    .avatar-ring { position: relative; display: inline-block; border-radius: 50%; padding: 4px; background: linear-gradient(135deg, var(--accent-a), var(--accent-b)); }
+    .avatar-ring img { border-radius: 50%; display: block; }
+
+    .social-icon { width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 12px; border: 1px solid var(--glass-border); background: var(--glass-bg); color: var(--text-secondary); text-decoration: none; transition: color 0.2s, border-color 0.2s, background 0.2s; backdrop-filter: blur(8px); }
+    .social-icon:hover { color: var(--accent-a); border-color: var(--accent-a); background: rgba(110,142,255,0.1); }
+
+    .project-card { transition: transform 0.35s cubic-bezier(.22,1,.36,1), box-shadow 0.35s; cursor: pointer; }
+    .project-card:hover { transform: translateY(-10px) scale(1.01); box-shadow: 0 24px 64px rgba(110,142,255,0.22); }
+    .project-card:hover .proj-overlay { opacity: 1; }
+    .proj-overlay { opacity: 0; transition: opacity 0.3s; }
+    .proj-img { width: 100%; height: 200px; object-fit: cover; border-radius: 14px 14px 0 0; }
+
+    /* ===== MARQUEE ===== */
+    .marquee-section { padding: 120px 0; background: var(--bg-secondary); position: relative; overflow: hidden; }
+    .marquee-fade-l { position: absolute; top: 0; left: 0; width: 180px; height: 100%; background: linear-gradient(to right, var(--bg-secondary), transparent); z-index: 10; pointer-events: none; }
+    .marquee-fade-r { position: absolute; top: 0; right: 0; width: 180px; height: 100%; background: linear-gradient(to left, var(--bg-secondary), transparent); z-index: 10; pointer-events: none; }
+
+    .mq-row { overflow: hidden; width: 100%; margin-bottom: 18px; }
+    .mq-inner { display: flex; gap: 16px; width: max-content; will-change: transform; }
+    .mq-inner.ltr  { animation: mq-ltr  30s linear infinite; }
+    .mq-inner.rtl  { animation: mq-rtl  24s linear infinite; }
+    .mq-inner.slow { animation: mq-slow 44s linear infinite; }
+    .mq-row:hover .mq-inner { animation-play-state: paused; }
+
+    @keyframes mq-ltr  { from { transform: translateX(0);    } to { transform: translateX(-50%); } }
+    @keyframes mq-rtl  { from { transform: translateX(-50%); } to { transform: translateX(0);    } }
+    @keyframes mq-slow { from { transform: translateX(0);    } to { transform: translateX(-50%); } }
+
+    .skill-pill { display: inline-flex; align-items: center; gap: 10px; padding: 11px 22px; border-radius: 50px; white-space: nowrap; background: var(--glass-bg); border: 1px solid var(--glass-border); backdrop-filter: blur(14px); font-size: 14px; font-weight: 500; color: var(--text-primary); transition: border-color 0.25s, background 0.25s, transform 0.2s; user-select: none; }
+    .skill-pill:hover { border-color: var(--accent-a); background: rgba(110,142,255,0.10); transform: scale(1.06); }
+    .pill-icon { font-size: 17px; line-height: 1; }
+
+    @media (max-width: 640px) { .orb { display: none; } }
+
+    /* === MODAL === */
+    .modal-backdrop {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,0.72);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .modal-backdrop.open { opacity: 1; pointer-events: all; }
+    .modal-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+      max-width: 680px; width: 100%;
+      max-height: 90vh; overflow-y: auto;
+      transform: translateY(32px) scale(0.97);
+      transition: transform 0.35s cubic-bezier(.22,1,.36,1);
+    }
+    .modal-backdrop.open .modal-box { transform: translateY(0) scale(1); }
+    .modal-box::-webkit-scrollbar { width: 4px; }
+    .modal-box::-webkit-scrollbar-thumb { background: var(--accent-a); border-radius: 2px; }
+    .modal-img {
+      width: 100%; height: 240px; object-fit: cover;
+      border-radius: 22px 22px 0 0;
+    }
+    .modal-body { padding: 32px; }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border);
+      color: var(--text-primary); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; transition: background 0.2s;
+      backdrop-filter: blur(8px);
+    }
+    .modal-close:hover { background: rgba(110,142,255,0.3); }
+    .modal-feature {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 0; border-bottom: 1px solid var(--glass-border);
+    }
+    .modal-feature:last-child { border-bottom: none; }
+    .modal-feat-icon {
+      width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+      background: linear-gradient(135deg,var(--accent-a),var(--accent-b));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+
+    /* === EDUCATION / CERTIFICATES === */
+    .edu-card {
+      display: flex; gap: 20px; align-items: flex-start;
+      padding: 24px; border-radius: 18px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(14px);
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .edu-card:hover { border-color: var(--accent-a); transform: translateY(-3px); }
+    .edu-icon {
+      width: 52px; height: 52px; border-radius: 14px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+    }
+    .cert-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
+      background: rgba(57,255,209,0.10); border: 1px solid rgba(57,255,209,0.25);
+      color: var(--accent-c);
+    }
+    .timeline-line {
+      position: absolute; left: 25px; top: 60px; bottom: 0;
+      width: 2px; background: linear-gradient(to bottom, var(--accent-a), transparent);
+    }
+
+  </style>
+</head>
+<body class="noise">
+<script>
+  // Ensure all .reveal elements are visible immediately (iframe-safe fallback)
+  (function() {
+    function showAll() {
+      var els = document.querySelectorAll('.reveal, .hidden-init');
+      for (var i = 0; i < els.length; i++) {
+        els[i].style.opacity = '1';
+        els[i].style.transform = 'translateY(0)';
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', showAll);
+    } else {
+      showAll();
+    }
+    // Also try after fonts/images load
+    window.addEventListener('load', showAll);
+    // And after a short delay as final safety net
+    setTimeout(showAll, 300);
+  })();
+</script>
+
+<!-- NAV -->
+<nav aria-label="Main navigation">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="#hero" style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--text-primary);text-decoration:none;">A<span class="grad-text">R</span></a>
+    <div class="hidden md:flex items-center gap-8">
+      <a href="#about"    class="nav-link">About</a>
+      <a href="#skills"   class="nav-link">Skills</a>
+      <a href="#projects" class="nav-link">Projects</a>
+      <a href="#contact"  class="nav-link">Contact</a>
+    </div>
+    <div class="flex items-center gap-4">
+      <button class="toggle-btn" id="themeToggle" aria-label="Toggle theme"><div class="toggle-thumb"></div></button>
+      <button id="menuBtn" class="md:hidden p-2 rounded-lg" style="border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text-primary);" aria-label="Menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+  <div id="mobileMenu" class="md:hidden hidden px-6 pb-5 flex flex-col gap-4">
+    <a href="#about"    class="nav-link" onclick="closeMobile()">About</a>
+    <a href="#skills"   class="nav-link" onclick="closeMobile()">Skills</a>
+    <a href="#projects" class="nav-link" onclick="closeMobile()">Projects</a>
+    <a href="#education" class="nav-link" onclick="closeMobile()">Education</a>
+    <a href="#contact"  class="nav-link" onclick="closeMobile()">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero" style="min-height:100vh;position:relative;display:flex;align-items:center;padding-top:80px;">
+  <div class="hero-mesh">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div style="position:absolute;inset:0;z-index:1;background-image:linear-gradient(rgba(110,142,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(110,142,255,0.04) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;"></div>
+  <div class="max-w-6xl mx-auto px-6 py-24 relative z-10 w-full">
+    <div class="flex flex-col lg:flex-row items-center gap-16">
+      <div class="flex-1 text-center lg:text-left">
+        <p class="section-label mb-4 reveal">✦ Available for opportunities</p>
+        <h1 class="text-5xl md:text-7xl font-black mb-6 reveal stagger-1" style="line-height:1.08;">
+          Crafting digital<br/><span class="grad-text">experiences</span><br/>that matter.
+        </h1>
+        <p class="text-lg mb-10 reveal stagger-2 max-w-xl mx-auto lg:mx-0" style="color:var(--text-secondary);line-height:1.7;">
+          Hi, I'm <strong style="color:var(--text-primary);">Alex Rivera</strong> — a full-stack developer &amp; UI designer who turns complex ideas into elegant, performant products.<span class="cursor"></span>
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center lg:justify-start reveal stagger-3">
+          <a href="#projects" class="cta-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 3l14 9-14 9V3z"/></svg>See My Work</a>
+          <a href="#contact" class="cta-btn-outline">Get in Touch</a>
+        </div>
+        <div class="flex gap-3 mt-10 justify-center lg:justify-start reveal stagger-4">
+          <a href="#" class="social-icon" aria-label="GitHub"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg></a>
+          <a href="#" class="social-icon" aria-label="LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+          <a href="#" class="social-icon" aria-label="Twitter"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+          <a href="#" class="social-icon" aria-label="Dribbble"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 24C5.385 24 0 18.615 0 12S5.385 0 12 0s12 5.385 12 12-5.385 12-12 12zm10.12-10.358c-.35-.11-3.17-.953-6.384-.438 1.34 3.684 1.887 6.684 1.992 7.308 2.3-1.555 3.936-4.02 4.395-6.87zm-6.115 7.808c-.153-.9-.75-4.032-2.19-7.77l-.066.02c-5.79 2.015-7.86 6.017-8.04 6.404 1.73 1.35 3.92 2.166 6.29 2.166 1.42 0 2.77-.29 4-.816zm-11.62-2.073c.232-.4 3.045-5.055 8.332-6.765.135-.045.27-.084.405-.12-.26-.585-.54-1.167-.832-1.74C7.17 11.775 2.206 11.71 1.756 11.7l-.004.312c0 2.633.998 5.037 2.634 6.855zm-2.42-8.955c.46.008 4.683.026 9.477-1.248-1.698-3.018-3.53-5.558-3.8-5.928-2.868 1.35-5.01 3.99-5.676 7.17zM9.6 2.052c.282.38 2.145 2.914 3.822 6 3.645-1.365 5.19-3.44 5.373-3.702-1.81-1.61-4.19-2.586-6.795-2.586-.485 0-.962.037-1.4.088zm10.884 2.71c-.23.317-1.938 2.487-5.71 4.04.241.494.473.997.68 1.51.062.153.118.308.173.463 3.397-.43 6.777.257 7.12.332-.03-2.35-.88-4.51-2.263-6.346z"/></svg></a>
+        </div>
+      </div>
+      <div class="flex-shrink-0 reveal stagger-3">
+        <div style="position:relative;">
+          <div class="avatar-ring" style="width:280px;height:280px;box-shadow:0 0 80px rgba(110,142,255,0.3);">
+            <img src="https://i.pravatar.cc/280?img=12" alt="Alex Rivera" width="272" height="272" style="object-fit:cover;" loading="eager"/>
+          </div>
+          <div class="glass" style="position:absolute;bottom:-20px;left:-30px;padding:12px 16px;border-radius:16px;display:flex;align-items:center;gap:10px;">
+            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent-a),var(--accent-b));display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+            <div><div style="font-size:11px;color:var(--text-secondary);">Projects Done</div><div style="font-size:18px;font-weight:700;">48+</div></div>
+          </div>
+          <div class="glass" style="position:absolute;top:-10px;right:-30px;padding:12px 16px;border-radius:16px;display:flex;align-items:center;gap:10px;">
+            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent-b),var(--accent-c));display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+            <div><div style="font-size:11px;color:var(--text-secondary);">Years Exp.</div><div style="font-size:18px;font-weight:700;">6+</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-center mt-20 reveal stagger-5">
+      <a href="#about" style="display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;color:var(--text-secondary);">
+        <span style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;">Scroll</span>
+        <div style="width:1px;height:40px;background:linear-gradient(to bottom,var(--accent-a),transparent);"></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" style="padding:120px 0;position:relative;">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex flex-col lg:flex-row gap-16 items-center">
+      <div class="flex-shrink-0 reveal">
+        <div class="glass" style="padding:10px;border-radius:24px;max-width:360px;position:relative;">
+          <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=720&q=80" alt="Developer workspace" width="360" height="440" style="object-fit:cover;border-radius:16px;width:100%;display:block;" loading="lazy"/>
+          <div class="glass" style="position:absolute;bottom:-24px;right:-24px;padding:16px 20px;border-radius:16px;">
+            <div style="font-size:28px;font-weight:800;">100<span class="grad-text">%</span></div>
+            <div style="font-size:12px;color:var(--text-secondary);">Client Satisfaction</div>
+          </div>
+        </div>
+      </div>
+      <div class="flex-1 reveal stagger-2">
+        <p class="section-label mb-4">About Me</p>
+        <h2 class="text-4xl md:text-5xl font-black mb-6" style="line-height:1.1;">A developer who<br/><span class="grad-text">thinks in design.</span></h2>
+        <p class="mb-5" style="color:var(--text-secondary);line-height:1.8;font-size:16px;">I'm Alex Rivera, a passionate full-stack developer based in San Francisco with over 6 years of experience building products for the web. My work lives at the intersection of elegant code and thoughtful UX.</p>
+        <p class="mb-8" style="color:var(--text-secondary);line-height:1.8;font-size:16px;">I've worked with startups, agencies, and Fortune 500 companies — shipping everything from real-time dashboards to consumer mobile apps. I believe great software is invisible: it solves problems so elegantly that people forget the complexity behind it.</p>
+        <div class="flex flex-wrap gap-6 mb-10">
+          <div class="glass" style="padding:20px 28px;border-radius:16px;text-align:center;flex:1;min-width:100px;"><div style="font-size:32px;font-weight:800;" class="grad-text">48+</div><div style="font-size:12px;color:var(--text-secondary);">Projects</div></div>
+          <div class="glass" style="padding:20px 28px;border-radius:16px;text-align:center;flex:1;min-width:100px;"><div style="font-size:32px;font-weight:800;" class="grad-text">6+</div><div style="font-size:12px;color:var(--text-secondary);">Years</div></div>
+          <div class="glass" style="padding:20px 28px;border-radius:16px;text-align:center;flex:1;min-width:100px;"><div style="font-size:32px;font-weight:800;" class="grad-text">20+</div><div style="font-size:12px;color:var(--text-secondary);">Clients</div></div>
+        </div>
+        <a href="#contact" class="cta-btn">Let's Collaborate</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS MARQUEE -->
+<section id="skills" class="marquee-section">
+  <div class="marquee-fade-l"></div>
+  <div class="marquee-fade-r"></div>
+  <div style="position:absolute;inset:0;background-image:radial-gradient(circle at 20% 50%,rgba(110,142,255,0.07) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(0,198,255,0.05) 0%,transparent 50%);pointer-events:none;"></div>
+
+  <div class="max-w-6xl mx-auto px-6 relative z-10">
+    <div class="text-center mb-16 reveal">
+      <p class="section-label mb-4">What I Do</p>
+      <h2 class="text-4xl md:text-5xl font-black">Skills &amp; <span class="grad-text">Expertise</span></h2>
+      <p style="color:var(--text-secondary);margin-top:12px;font-size:15px;">Technologies I work with every day</p>
+    </div>
+  </div>
+
+  <div class="mq-row"><div class="mq-inner ltr"  id="mq1"></div></div>
+  <div class="mq-row"><div class="mq-inner rtl"  id="mq2"></div></div>
+  <div class="mq-row"><div class="mq-inner slow" id="mq3"></div></div>
+
+  <div class="max-w-6xl mx-auto px-6 relative z-10 mt-20">
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="glass p-7 reveal stagger-1" style="border-radius:20px;">
+        <div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--accent-a),var(--accent-b));display:flex;align-items:center;justify-content:center;margin-bottom:16px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <h3 style="font-size:17px;font-weight:700;margin-bottom:8px;">Frontend</h3>
+        <p style="font-size:13px;color:var(--text-secondary);line-height:1.7;">React, Next.js, TypeScript, Tailwind CSS, Three.js, Framer Motion, Storybook</p>
+      </div>
+      <div class="glass p-7 reveal stagger-2" style="border-radius:20px;">
+        <div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--accent-b),var(--accent-c));display:flex;align-items:center;justify-content:center;margin-bottom:16px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
+        <h3 style="font-size:17px;font-weight:700;margin-bottom:8px;">Backend</h3>
+        <p style="font-size:13px;color:var(--text-secondary);line-height:1.7;">Node.js, Python, PostgreSQL, Redis, GraphQL, REST APIs, Prisma, FastAPI</p>
+      </div>
+      <div class="glass p-7 reveal stagger-3" style="border-radius:20px;">
+        <div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--accent-c),var(--accent-a));display:flex;align-items:center;justify-content:center;margin-bottom:16px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <h3 style="font-size:17px;font-weight:700;margin-bottom:8px;">DevOps &amp; Tools</h3>
+        <p style="font-size:13px;color:var(--text-secondary);line-height:1.7;">AWS, Docker, Vercel, GitHub Actions, Turborepo, Figma, Supabase, Stripe</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" style="padding:120px 0;position:relative;">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-16 reveal">
+      <p class="section-label mb-4">Selected Work</p>
+      <h2 class="text-4xl md:text-5xl font-black">Recent <span class="grad-text">Projects</span></h2>
+      <p style="color:var(--text-secondary);margin-top:10px;font-size:15px;">Click any card to learn more</p>
+    </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+      <article class="glass project-card reveal stagger-1" style="overflow:hidden;border-radius:20px;cursor:pointer;"
+        onclick="openModal(0)">
+        <div style="position:relative;overflow:hidden;">
+          <img class="proj-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='400' viewBox='0 0 700 400'%3E%3Crect width='700' height='400' fill='%230a0a1a'/%3E%3Crect x='60' y='60' width='580' height='280' rx='16' fill='%23111122' opacity='0.8'/%3E%3Crect x='80' y='80' width='540' height='32' rx='8' fill='%236e8eff' opacity='0.15'/%3E%3Ccircle cx='100' cy='96' r='7' fill='%23ff5f57'/%3E%3Ccircle cx='122' cy='96' r='7' fill='%23febc2e'/%3E%3Ccircle cx='144' cy='96' r='7' fill='%2328c840'/%3E%3Crect x='80' y='130' width='160' height='100' rx='8' fill='%236e8eff' opacity='0.12'/%3E%3Crect x='260' y='130' width='120' height='45' rx='8' fill='%2300c6ff' opacity='0.12'/%3E%3Crect x='260' y='185' width='120' height='45' rx='8' fill='%236e8eff' opacity='0.08'/%3E%3Crect x='400' y='130' width='220' height='100' rx='8' fill='%2300c6ff' opacity='0.08'/%3E%3Crect x='90' y='248' width='540' height='6' rx='3' fill='%236e8eff' opacity='0.1'/%3E%3Crect x='90' y='262' width='400' height='6' rx='3' fill='%23ffffff' opacity='0.07'/%3E%3Ctext x='350' y='340' text-anchor='middle' fill='%236e8eff' font-size='14' font-family='monospace' opacity='0.5'%3EAnalytics%20Dashboard%3C/text%3E%3C/svg%3E" alt="Analytics Dashboard" loading="lazy"/>
+          <div class="proj-overlay" style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(110,142,255,0.88),rgba(0,198,255,0.7));display:flex;align-items:center;justify-content:center;">
+            <span style="color:#fff;font-weight:700;font-size:14px;letter-spacing:0.05em;">View Details →</span>
+          </div>
+        </div>
+        <div style="padding:24px;">
+          <div class="flex gap-2 mb-3 flex-wrap"><span class="tag">React</span><span class="tag">D3.js</span><span class="tag">Node</span></div>
+          <h3 style="font-size:19px;font-weight:700;margin-bottom:8px;">Analytics Pro Dashboard</h3>
+          <p style="font-size:14px;color:var(--text-secondary);line-height:1.6;">Real-time analytics platform with interactive charts and AI-powered insights.</p>
+        </div>
+      </article>
+
+      <article class="glass project-card reveal stagger-2" style="overflow:hidden;border-radius:20px;cursor:pointer;"
+        onclick="openModal(1)">
+        <div style="position:relative;overflow:hidden;">
+          <img class="proj-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='400' viewBox='0 0 700 400'%3E%3Crect width='700' height='400' fill='%230a140a'/%3E%3Crect x='60' y='60' width='580' height='280' rx='16' fill='%23111122' opacity='0.8'/%3E%3Crect x='80' y='80' width='540' height='32' rx='8' fill='%2339ffd1' opacity='0.15'/%3E%3Ccircle cx='100' cy='96' r='7' fill='%23ff5f57'/%3E%3Ccircle cx='122' cy='96' r='7' fill='%23febc2e'/%3E%3Ccircle cx='144' cy='96' r='7' fill='%2328c840'/%3E%3Crect x='80' y='130' width='160' height='100' rx='8' fill='%2339ffd1' opacity='0.12'/%3E%3Crect x='260' y='130' width='120' height='45' rx='8' fill='%236e8eff' opacity='0.12'/%3E%3Crect x='260' y='185' width='120' height='45' rx='8' fill='%2339ffd1' opacity='0.08'/%3E%3Crect x='400' y='130' width='220' height='100' rx='8' fill='%236e8eff' opacity='0.08'/%3E%3Crect x='90' y='248' width='540' height='6' rx='3' fill='%2339ffd1' opacity='0.1'/%3E%3Crect x='90' y='262' width='400' height='6' rx='3' fill='%23ffffff' opacity='0.07'/%3E%3Ctext x='350' y='340' text-anchor='middle' fill='%2339ffd1' font-size='14' font-family='monospace' opacity='0.5'%3ETravel%20App%3C/text%3E%3C/svg%3E" alt="Travel App" loading="lazy"/>
+          <div class="proj-overlay" style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(57,255,209,0.82),rgba(110,142,255,0.7));display:flex;align-items:center;justify-content:center;">
+            <span style="color:#fff;font-weight:700;font-size:14px;letter-spacing:0.05em;">View Details →</span>
+          </div>
+        </div>
+        <div style="padding:24px;">
+          <div class="flex gap-2 mb-3 flex-wrap"><span class="tag">Next.js</span><span class="tag">Mapbox</span><span class="tag">Supabase</span></div>
+          <h3 style="font-size:19px;font-weight:700;margin-bottom:8px;">Wandermap Travel App</h3>
+          <p style="font-size:14px;color:var(--text-secondary);line-height:1.6;">AI-curated travel itineraries with interactive 3D maps and real-time weather overlays.</p>
+        </div>
+      </article>
+
+      <article class="glass project-card reveal stagger-3" style="overflow:hidden;border-radius:20px;cursor:pointer;"
+        onclick="openModal(2)">
+        <div style="position:relative;overflow:hidden;">
+          <img class="proj-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='400' viewBox='0 0 700 400'%3E%3Crect width='700' height='400' fill='%231a0a14'/%3E%3Crect x='60' y='60' width='580' height='280' rx='16' fill='%23111122' opacity='0.8'/%3E%3Crect x='80' y='80' width='540' height='32' rx='8' fill='%2300c6ff' opacity='0.15'/%3E%3Ccircle cx='100' cy='96' r='7' fill='%23ff5f57'/%3E%3Ccircle cx='122' cy='96' r='7' fill='%23febc2e'/%3E%3Ccircle cx='144' cy='96' r='7' fill='%2328c840'/%3E%3Crect x='80' y='130' width='160' height='100' rx='8' fill='%2300c6ff' opacity='0.12'/%3E%3Crect x='260' y='130' width='120' height='45' rx='8' fill='%2339ffd1' opacity='0.12'/%3E%3Crect x='260' y='185' width='120' height='45' rx='8' fill='%2300c6ff' opacity='0.08'/%3E%3Crect x='400' y='130' width='220' height='100' rx='8' fill='%2339ffd1' opacity='0.08'/%3E%3Crect x='90' y='248' width='540' height='6' rx='3' fill='%2300c6ff' opacity='0.1'/%3E%3Crect x='90' y='262' width='400' height='6' rx='3' fill='%23ffffff' opacity='0.07'/%3E%3Ctext x='350' y='340' text-anchor='middle' fill='%2300c6ff' font-size='14' font-family='monospace' opacity='0.5'%3EE-Commerce%3C/text%3E%3C/svg%3E" alt="E-Commerce" loading="lazy"/>
+          <div class="proj-overlay" style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,198,255,0.85),rgba(57,255,209,0.65));display:flex;align-items:center;justify-content:center;">
+            <span style="color:#fff;font-weight:700;font-size:14px;letter-spacing:0.05em;">View Details →</span>
+          </div>
+        </div>
+        <div style="padding:24px;">
+          <div class="flex gap-2 mb-3 flex-wrap"><span class="tag">React</span><span class="tag">Stripe</span><span class="tag">Postgres</span></div>
+          <h3 style="font-size:19px;font-weight:700;margin-bottom:8px;">Luminary E-Commerce</h3>
+          <p style="font-size:14px;color:var(--text-secondary);line-height:1.6;">Full-stack storefront with inventory management and glassmorphic checkout flow.</p>
+        </div>
+      </article>
+
+      <article class="glass project-card reveal stagger-1" style="overflow:hidden;border-radius:20px;cursor:pointer;"
+        onclick="openModal(3)">
+        <div style="position:relative;overflow:hidden;">
+          <img class="proj-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='400' viewBox='0 0 700 400'%3E%3Crect width='700' height='400' fill='%230a0a1a'/%3E%3Crect x='60' y='60' width='580' height='280' rx='16' fill='%23111122' opacity='0.8'/%3E%3Crect x='80' y='80' width='540' height='32' rx='8' fill='%236e8eff' opacity='0.15'/%3E%3Ccircle cx='100' cy='96' r='7' fill='%23ff5f57'/%3E%3Ccircle cx='122' cy='96' r='7' fill='%23febc2e'/%3E%3Ccircle cx='144' cy='96' r='7' fill='%2328c840'/%3E%3Crect x='80' y='130' width='160' height='100' rx='8' fill='%236e8eff' opacity='0.12'/%3E%3Crect x='260' y='130' width='120' height='45' rx='8' fill='%2339ffd1' opacity='0.12'/%3E%3Crect x='260' y='185' width='120' height='45' rx='8' fill='%236e8eff' opacity='0.08'/%3E%3Crect x='400' y='130' width='220' height='100' rx='8' fill='%2339ffd1' opacity='0.08'/%3E%3Crect x='90' y='248' width='540' height='6' rx='3' fill='%236e8eff' opacity='0.1'/%3E%3Crect x='90' y='262' width='400' height='6' rx='3' fill='%23ffffff' opacity='0.07'/%3E%3Ctext x='350' y='340' text-anchor='middle' fill='%236e8eff' font-size='14' font-family='monospace' opacity='0.5'%3EAI%20Assistant%3C/text%3E%3C/svg%3E" alt="AI Chat" loading="lazy"/>
+          <div class="proj-overlay" style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(110,142,255,0.82),rgba(57,255,209,0.7));display:flex;align-items:center;justify-content:center;">
+            <span style="color:#fff;font-weight:700;font-size:14px;letter-spacing:0.05em;">View Details →</span>
+          </div>
+        </div>
+        <div style="padding:24px;">
+          <div class="flex gap-2 mb-3 flex-wrap"><span class="tag">OpenAI</span><span class="tag">WebSocket</span><span class="tag">Redis</span></div>
+          <h3 style="font-size:19px;font-weight:700;margin-bottom:8px;">NeuralChat AI Assistant</h3>
+          <p style="font-size:14px;color:var(--text-secondary);line-height:1.6;">Streaming AI chat with context memory, tool-use capabilities, and multi-model routing.</p>
+        </div>
+      </article>
+
+      <article class="glass project-card reveal stagger-2" style="overflow:hidden;border-radius:20px;cursor:pointer;"
+        onclick="openModal(4)">
+        <div style="position:relative;overflow:hidden;">
+          <img class="proj-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='400' viewBox='0 0 700 400'%3E%3Crect width='700' height='400' fill='%230a0f1a'/%3E%3Crect x='60' y='60' width='580' height='280' rx='16' fill='%23111122' opacity='0.8'/%3E%3Crect x='80' y='80' width='540' height='32' rx='8' fill='%2300c6ff' opacity='0.15'/%3E%3Ccircle cx='100' cy='96' r='7' fill='%23ff5f57'/%3E%3Ccircle cx='122' cy='96' r='7' fill='%23febc2e'/%3E%3Ccircle cx='144' cy='96' r='7' fill='%2328c840'/%3E%3Crect x='80' y='130' width='160' height='100' rx='8' fill='%2300c6ff' opacity='0.12'/%3E%3Crect x='260' y='130' width='120' height='45' rx='8' fill='%236e8eff' opacity='0.12'/%3E%3Crect x='260' y='185' width='120' height='45' rx='8' fill='%2300c6ff' opacity='0.08'/%3E%3Crect x='400' y='130' width='220' height='100' rx='8' fill='%236e8eff' opacity='0.08'/%3E%3Crect x='90' y='248' width='540' height='6' rx='3' fill='%2300c6ff' opacity='0.1'/%3E%3Crect x='90' y='262' width='400' height='6' rx='3' fill='%23ffffff' opacity='0.07'/%3E%3Ctext x='350' y='340' text-anchor='middle' fill='%2300c6ff' font-size='14' font-family='monospace' opacity='0.5'%3EBudget%20Tracker%3C/text%3E%3C/svg%3E" alt="Finance App" loading="lazy"/>
+          <div class="proj-overlay" style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,198,255,0.82),rgba(110,142,255,0.7));display:flex;align-items:center;justify-content:center;">
+            <span style="color:#fff;font-weight:700;font-size:14px;letter-spacing:0.05em;">View Details →</span>
+          </div>
+        </div>
+        <div style="padding:24px;">
+          <div class="flex gap-2 mb-3 flex-wrap"><span class="tag">Vue 3</span><span class="tag">FastAPI</span><span class="tag">Chart.js</span></div>
+          <h3 style="font-size:19px;font-weight:700;margin-bottom:8px;">Finflow Budget Tracker</h3>
+          <p style="font-size:14px;color:var(--text-secondary);line-height:1.6;">Personal finance app with smart categorization and beautiful data visualizations.</p>
+        </div>
+      </article>
+
+      <div class="glass reveal stagger-3" style="border-radius:20px;padding:40px 32px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:1.5px dashed var(--glass-border);background:transparent;min-height:320px;">
+        <div style="width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,var(--accent-a),var(--accent-b));display:flex;align-items:center;justify-content:center;margin:0 auto 20px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        <h3 style="font-size:20px;font-weight:700;margin-bottom:8px;">More on GitHub</h3>
+        <p style="font-size:14px;color:var(--text-secondary);margin-bottom:20px;line-height:1.6;">Explore 40+ more open-source projects and contributions.</p>
+        <a href="#" class="cta-btn" style="padding:12px 24px;font-size:14px;">View GitHub →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PROJECT MODAL -->
+<div class="modal-backdrop" id="projModal" onclick="handleBackdropClick(event)">
+  <div class="modal-box" style="position:relative;">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close modal">&#x2715;</button>
+    <img id="mImg" class="modal-img" src="" alt=""/>
+    <div class="modal-body">
+      <div id="mTags" class="flex gap-2 mb-4 flex-wrap"></div>
+      <h2 id="mTitle" style="font-size:26px;font-weight:800;margin-bottom:10px;"></h2>
+      <p id="mDesc" style="color:var(--text-secondary);line-height:1.8;font-size:15px;margin-bottom:24px;"></p>
+      <h4 style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent-a);margin-bottom:14px;">Key Features</h4>
+      <div id="mFeatures"></div>
+      <div class="flex gap-3 mt-8 flex-wrap">
+        <a id="mDemo" href="#" class="cta-btn" style="padding:12px 24px;font-size:14px;" target="_blank">Live Demo</a>
+        <a id="mSource" href="#" class="cta-btn-outline" style="padding:11px 22px;font-size:14px;" target="_blank">View Source</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EDUCATION & CERTIFICATES -->
+<section id="education" style="padding:120px 0;position:relative;">
+  <div style="position:absolute;inset:0;background-image:radial-gradient(circle at 80% 20%,rgba(57,255,209,0.06) 0%,transparent 50%);pointer-events:none;"></div>
+  <div class="max-w-6xl mx-auto px-6 relative z-10">
+
+    <div class="text-center mb-16 reveal">
+      <p class="section-label mb-4">Background</p>
+      <h2 class="text-4xl md:text-5xl font-black">Education &amp; <span class="grad-text">Achievements</span></h2>
+      <p style="color:var(--text-secondary);margin-top:10px;font-size:15px;">Academic milestones, school activities &amp; certifications</p>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-12">
+
+      <!-- LEFT: Education + School Activities -->
+      <div>
+        <h3 class="reveal" style="font-size:18px;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:10px;">
+          <span style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--accent-a),var(--accent-b));display:inline-flex;align-items:center;justify-content:center;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          </span>
+          Education
+        </h3>
+
+        <div style="position:relative;padding-left:52px;">
+          <div class="timeline-line"></div>
+
+          <div class="edu-card reveal stagger-1" style="margin-bottom:20px;position:relative;">
+            <div style="position:absolute;left:-40px;top:50%;transform:translateY(-50%);width:14px;height:14px;border-radius:50%;background:var(--accent-a);border:3px solid var(--bg-primary);box-shadow:0 0 12px var(--accent-a);"></div>
+            <div class="edu-icon" style="background:linear-gradient(135deg,rgba(110,142,255,0.2),rgba(0,198,255,0.1));">🎓</div>
+            <div style="flex:1;">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:6px;margin-bottom:6px;">
+                <h4 style="font-size:16px;font-weight:700;">B.S. Computer Science</h4>
+                <span style="font-size:12px;color:var(--accent-b);font-weight:600;background:rgba(0,198,255,0.1);padding:3px 10px;border-radius:12px;">2018 – 2022</span>
+              </div>
+              <p style="font-size:14px;font-weight:600;color:var(--accent-a);margin-bottom:6px;">State University of Technology</p>
+              <p style="font-size:13px;color:var(--text-secondary);line-height:1.6;">GPA: 3.8 / 4.0 · Dean's List 3 consecutive years · Thesis on distributed real-time systems.</p>
+            </div>
+          </div>
+
+          <div class="edu-card reveal stagger-2" style="margin-bottom:20px;position:relative;">
+            <div style="position:absolute;left:-40px;top:50%;transform:translateY(-50%);width:14px;height:14px;border-radius:50%;background:var(--accent-b);border:3px solid var(--bg-primary);box-shadow:0 0 12px var(--accent-b);"></div>
+            <div class="edu-icon" style="background:linear-gradient(135deg,rgba(0,198,255,0.2),rgba(57,255,209,0.1));">🏫</div>
+            <div style="flex:1;">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:6px;margin-bottom:6px;">
+                <h4 style="font-size:16px;font-weight:700;">Senior High School — STEM</h4>
+                <span style="font-size:12px;color:var(--accent-c);font-weight:600;background:rgba(57,255,209,0.1);padding:3px 10px;border-radius:12px;">2016 – 2018</span>
+              </div>
+              <p style="font-size:14px;font-weight:600;color:var(--accent-b);margin-bottom:6px;">National Science High School</p>
+              <p style="font-size:13px;color:var(--text-secondary);line-height:1.6;">Graduated with High Honors · Science & Technology track · Capstone: IoT-based Smart Campus System.</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- School Activities -->
+        <h3 class="reveal" style="font-size:18px;font-weight:700;margin:32px 0 20px;display:flex;align-items:center;gap:10px;">
+          <span style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--accent-b),var(--accent-c));display:inline-flex;align-items:center;justify-content:center;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </span>
+          School Activities
+        </h3>
+        <div class="flex flex-col gap-4">
+          <div class="edu-card reveal stagger-1">
+            <div class="edu-icon" style="background:rgba(110,142,255,0.12);">🏆</div>
+            <div>
+              <h4 style="font-size:15px;font-weight:700;margin-bottom:4px;">Google Developer Student Club — Lead</h4>
+              <p style="font-size:13px;color:var(--text-secondary);line-height:1.6;">Led a 60-member club, organized hackathons, workshops, and hosted monthly tech talks with industry speakers.</p>
+            </div>
+          </div>
+          <div class="edu-card reveal stagger-2">
+            <div class="edu-icon" style="background:rgba(0,198,255,0.10);">💻</div>
+            <div>
+              <h4 style="font-size:15px;font-weight:700;margin-bottom:4px;">University Hackathon — 1st Place</h4>
+              <p style="font-size:13px;color:var(--text-secondary);line-height:1.6;">Won the 48-hr national hackathon building an AI-powered campus navigation app. Team of 4, 120 teams competing.</p>
+            </div>
+          </div>
+          <div class="edu-card reveal stagger-3">
+            <div class="edu-icon" style="background:rgba(57,255,209,0.10);">📰</div>
+            <div>
+              <h4 style="font-size:15px;font-weight:700;margin-bottom:4px;">Tech Publication — Editor in Chief</h4>
+              <p style="font-size:13px;color:var(--text-secondary);line-height:1.6;">Managed a student-run tech magazine with monthly issues covering CS research, coding tutorials, and campus innovations.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Certificates -->
+      <div>
+        <h3 class="reveal" style="font-size:18px;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:10px;">
+          <span style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--accent-c),var(--accent-a));display:inline-flex;align-items:center;justify-content:center;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+          </span>
+          Certificates
+        </h3>
+
+        <div class="flex flex-col gap-5">
+
+          <div class="edu-card reveal stagger-1" style="gap:16px;">
+            <div class="edu-icon" style="background:linear-gradient(135deg,rgba(255,165,0,0.2),rgba(255,100,0,0.1));font-size:24px;">☁️</div>
+            <div style="flex:1;">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:6px;margin-bottom:6px;">
+                <h4 style="font-size:15px;font-weight:700;">AWS Certified Solutions Architect</h4>
+                <span class="cert-badge">✓ Verified</span>
+              </div>
+              <p style="font-size:13px;color:var(--accent-a);font-weight:600;margin-bottom:4px;">Amazon Web Services · 2023</p>
+              <p style="font-size:13px;color:var(--text-secondary);">Associate level. Covers cloud architecture, high availability, security, and cost optimization.</p>
+            </div>
+          </div>
+
+          <div class="edu-card reveal stagger-2" style="gap:16px;">
+            <div class="edu-icon" style="background:linear-gradient(135deg,rgba(0,120,215,0.2),rgba(0,80,180,0.1));font-size:24px;">🔷</div>
+            <div style="flex:1;">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:6px;margin-bottom:6px;">
+                <h4 style="font-size:15px;font-weight:700;">Meta Front-End Developer</h4>
+                <span class="cert-badge">✓ Verified</span>
+              </div>
+              <p style="font-size:13px;color:var(--accent-b);font-weight:600;margin-bottom:4px;">Meta / Coursera · 2022</p>
+              <p style="font-size:13px;color:var(--text-secondary);">9-course professional certificate covering React, UX design, version control, and advanced CSS.</p>
+            </div>
+          </div>
+
+          <div class="edu-card reveal stagger-3" style="gap:16px;">
+            <div class="edu-icon" style="background:linear-gradient(135deg,rgba(57,255,209,0.2),rgba(0,180,150,0.1));font-size:24px;">🤖</div>
+            <div style="flex:1;">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:6px;margin-bottom:6px;">
+                <h4 style="font-size:15px;font-weight:700;">Deep Learning Specialization</h4>
+                <span class="cert-badge">✓ Verified</span>
+              </div>
+              <p style="font-size:13px;color:var(--accent-c);font-weight:600;margin-bottom:4px;">DeepLearning.AI / Coursera · 2023</p>
+              <p style="font-size:13px;color:var(--text-secondary);">5-course series: neural networks, CNNs, sequence models, and ML project structuring.</p>
+            </div>
+          </div>
+
+          <div class="edu-card reveal stagger-1" style="gap:16px;">
+            <div class="edu-icon" style="background:linear-gradient(135deg,rgba(110,142,255,0.2),rgba(60,90,200,0.1));font-size:24px;">🐙</div>
+            <div style="flex:1;">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:6px;margin-bottom:6px;">
+                <h4 style="font-size:15px;font-weight:700;">GitHub Actions — CI/CD</h4>
+                <span class="cert-badge">✓ Verified</span>
+              </div>
+              <p style="font-size:13px;color:var(--accent-a);font-weight:600;margin-bottom:4px;">GitHub / LinkedIn Learning · 2022</p>
+              <p style="font-size:13px;color:var(--text-secondary);">Automated testing, deployment pipelines, Docker integration, and environment secrets management.</p>
+            </div>
+          </div>
+
+          <div class="edu-card reveal stagger-2" style="gap:16px;">
+            <div class="edu-icon" style="background:linear-gradient(135deg,rgba(255,200,0,0.2),rgba(200,150,0,0.1));font-size:24px;">🎨</div>
+            <div style="flex:1;">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:6px;margin-bottom:6px;">
+                <h4 style="font-size:15px;font-weight:700;">Google UX Design Certificate</h4>
+                <span class="cert-badge">✓ Verified</span>
+              </div>
+              <p style="font-size:13px;color:var(--accent-b);font-weight:600;margin-bottom:4px;">Google / Coursera · 2021</p>
+              <p style="font-size:13px;color:var(--text-secondary);">End-to-end UX process: user research, wireframing, prototyping in Figma, and usability testing.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="padding:120px 0;background:var(--bg-secondary);position:relative;overflow:hidden;">
+  <div style="position:absolute;bottom:-200px;right:-200px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(110,142,255,0.14),transparent 70%);pointer-events:none;"></div>
+  <div class="max-w-4xl mx-auto px-6 relative z-10">
+    <div class="text-center mb-16 reveal">
+      <p class="section-label mb-4">Get in Touch</p>
+      <h2 class="text-4xl md:text-5xl font-black">Let's build something <span class="grad-text">amazing.</span></h2>
+      <p style="color:var(--text-secondary);font-size:16px;max-width:500px;margin:16px auto 0;line-height:1.7;">Whether it's a new project, a collaboration, or just a hello — my inbox is always open.</p>
+    </div>
+    <div class="glass p-10 md:p-14 reveal stagger-1">
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="flex flex-col gap-2"><label style="font-size:13px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.08em;" for="fname">Name</label><input class="form-input" id="fname" type="text" placeholder="Your full name" autocomplete="name"/></div>
+        <div class="flex flex-col gap-2"><label style="font-size:13px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.08em;" for="femail">Email</label><input class="form-input" id="femail" type="email" placeholder="you@example.com" autocomplete="email"/></div>
+        <div class="flex flex-col gap-2 md:col-span-2"><label style="font-size:13px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.08em;" for="fsubject">Subject</label><input class="form-input" id="fsubject" type="text" placeholder="What's this about?"/></div>
+        <div class="flex flex-col gap-2 md:col-span-2"><label style="font-size:13px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.08em;" for="fmsg">Message</label><textarea class="form-input" id="fmsg" rows="5" placeholder="Tell me about your project..."></textarea></div>
+        <div class="md:col-span-2 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+          <p style="font-size:13px;color:var(--text-secondary);">I typically respond within 24 hours.</p>
+          <button class="cta-btn" id="sendBtn" type="button" onclick="sendMessage()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Send Message</button>
+        </div>
+        <div id="successMsg" style="display:none;padding:14px 20px;border-radius:12px;border:1px solid var(--accent-c);background:rgba(57,255,209,0.08);color:var(--accent-c);font-size:14px;text-align:center;" class="md:col-span-2">✓ Message sent! I'll be in touch soon.</div>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8 reveal stagger-2">
+      <div class="glass p-6 text-center" style="border-radius:16px;"><div style="color:var(--accent-a);margin-bottom:8px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto;display:block;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">Email</div><div style="font-size:14px;font-weight:600;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4b232e2727240b2a272e3339223d2e392a652f2e3d">[email&#160;protected]</a></div></div>
+      <div class="glass p-6 text-center" style="border-radius:16px;"><div style="color:var(--accent-b);margin-bottom:8px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto;display:block;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">Location</div><div style="font-size:14px;font-weight:600;">San Francisco, CA</div></div>
+      <div class="glass p-6 text-center" style="border-radius:16px;"><div style="color:var(--accent-c);margin-bottom:8px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto;display:block;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">Availability</div><div style="font-size:14px;font-weight:600;">Open to Projects</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="padding:40px 24px;text-align:center;border-top:1px solid var(--glass-border);">
+  <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+    <p style="font-size:13px;color:var(--text-secondary);">&#169; 2025 Alex Rivera. Crafted with &#10084; &amp; a lot of coffee.</p>
+    <div class="flex gap-4">
+      <a href="#" class="social-icon" aria-label="GitHub" style="width:36px;height:36px;border-radius:10px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg></a>
+      <a href="#" class="social-icon" aria-label="LinkedIn" style="width:36px;height:36px;border-radius:10px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+    </div>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js">
+  // ===== PROJECT MODAL DATA =====
+  var PROJECTS = [
+    {
+      title: 'Analytics Pro Dashboard',
+      tags: ['React', 'D3.js', 'Node.js', 'PostgreSQL'],
+      desc: 'A comprehensive real-time analytics platform built for SaaS businesses. Processes over 1M events/day with sub-100ms query response, featuring live user segmentation, funnel analysis, and AI-powered anomaly detection. Deployed across 3 AWS regions with 99.98% uptime.',
+      features: [
+        { icon: '📊', text: 'Interactive charts with 15+ visualization types powered by D3.js' },
+        { icon: '⚡', text: 'Real-time event streaming via WebSocket with Redis pub/sub' },
+        { icon: '🤖', text: 'AI anomaly detection using statistical z-score analysis' },
+        { icon: '👥', text: 'Role-based access control with team workspaces' },
+      ],
+      demo: '#', source: '#'
+    },
+    {
+      title: 'Wandermap Travel App',
+      tags: ['Next.js', 'Mapbox GL', 'Supabase', 'OpenAI'],
+      desc: 'An AI-powered travel planning app that generates personalized itineraries based on your travel style, budget, and interests. Features 3D interactive maps, live weather overlays, and a community of 50,000+ travellers sharing routes and tips.',
+      features: [
+        { icon: '🗺️', text: 'Mapbox GL 3D terrain maps with custom POI layers' },
+        { icon: '🌤️', text: 'Real-time weather overlays using Open-Meteo API' },
+        { icon: '✈️', text: 'AI itinerary generation with GPT-4 fine-tuned on travel data' },
+        { icon: '📸', text: 'Community photo pins geotagged and linked to itinerary stops' },
+      ],
+      demo: '#', source: '#'
+    },
+    {
+      title: 'Luminary E-Commerce',
+      tags: ['React', 'Stripe', 'PostgreSQL', 'Node.js'],
+      desc: 'A full-featured headless e-commerce platform with a glassmorphic UI. Handles inventory, subscriptions, and one-time purchases with a seamless checkout flow. Integrated with Stripe for payments, including saved cards, 3D Secure, and automatic retries.',
+      features: [
+        { icon: '💳', text: 'Stripe integration: subscriptions, one-time, saved cards, 3DS' },
+        { icon: '📦', text: 'Real-time inventory management with low-stock alerts' },
+        { icon: '🔍', text: 'Full-text product search with faceted filtering' },
+        { icon: '📧', text: 'Automated order confirmation and shipping emails via Resend' },
+      ],
+      demo: '#', source: '#'
+    },
+    {
+      title: 'NeuralChat AI Assistant',
+      tags: ['OpenAI API', 'WebSocket', 'Redis', 'React'],
+      desc: 'A streaming AI chat interface supporting multi-turn conversations with persistent memory. Routes queries to the most cost-effective model based on complexity. Supports tool use (web search, code execution, file reading) and markdown-rich responses.',
+      features: [
+        { icon: '🧠', text: 'Persistent memory with vector embeddings stored in pgvector' },
+        { icon: '🔀', text: 'Smart model routing: GPT-4o for complex tasks, GPT-4o-mini for simple ones' },
+        { icon: '🛠️', text: 'Tool use: live search, Python sandbox, PDF reading' },
+        { icon: '⌨️', text: 'Streaming responses with token-by-token rendering via SSE' },
+      ],
+      demo: '#', source: '#'
+    },
+    {
+      title: 'Finflow Budget Tracker',
+      tags: ['Vue 3', 'FastAPI', 'Chart.js', 'PostgreSQL'],
+      desc: 'A personal finance app that connects to bank accounts via Plaid, auto-categorizes transactions with ML, and forecasts future spending. Features beautiful Chart.js visualizations, monthly reports, and smart saving goal recommendations.',
+      features: [
+        { icon: '🏦', text: 'Bank sync via Plaid API — 11,000+ financial institutions' },
+        { icon: '🏷️', text: 'ML transaction categorization with 94% accuracy' },
+        { icon: '📈', text: 'Spending forecasts using linear regression on 12-month history' },
+        { icon: '🎯', text: 'Smart saving goals with progress tracking and milestone alerts' },
+      ],
+      demo: '#', source: '#'
+    },
+  ];
+
+  function openModal(idx) {
+    var p = PROJECTS[idx];
+    var svgs = [
+      'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'700\' height=\'240\' viewBox=\'0 0 700 240\'%3E%3Crect width=\'700\' height=\'240\' fill=\'%230a0a1a\'/%3E%3Crect x=\'40\' y=\'30\' width=\'620\' height=\'180\' rx=\'12\' fill=\'%23111122\'/%3E%3Crect x=\'60\' y=\'50\' width=\'580\' height=\'20\' rx=\'6\' fill=\'%236e8eff\' opacity=\'0.12\'/%3E%3Crect x=\'60\' y=\'84\' width=\'160\' height=\'90\' rx=\'8\' fill=\'%236e8eff\' opacity=\'0.1\'/%3E%3Crect x=\'240\' y=\'84\' width=\'120\' height=\'40\' rx=\'8\' fill=\'%2300c6ff\' opacity=\'0.1\'/%3E%3Ctext x=\'350\' y=\'200\' text-anchor=\'middle\' fill=\'%236e8eff\' font-size=\'13\' font-family=\'monospace\' opacity=\'0.4\'%3EAnalytics Dashboard%3C/text%3E%3C/svg%3E',
+      'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'700\' height=\'240\' viewBox=\'0 0 700 240\'%3E%3Crect width=\'700\' height=\'240\' fill=\'%230a140a\'/%3E%3Ccircle cx=\'350\' cy=\'120\' r=\'80\' fill=\'none\' stroke=\'%2339ffd1\' stroke-width=\'1\' opacity=\'0.15\'/%3E%3Ccircle cx=\'350\' cy=\'120\' r=\'50\' fill=\'%2339ffd1\' opacity=\'0.06\'/%3E%3Ctext x=\'350\' y=\'200\' text-anchor=\'middle\' fill=\'%2339ffd1\' font-size=\'13\' font-family=\'monospace\' opacity=\'0.4\'%3EWandermap%3C/text%3E%3C/svg%3E',
+      'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'700\' height=\'240\' viewBox=\'0 0 700 240\'%3E%3Crect width=\'700\' height=\'240\' fill=\'%231a0a14\'/%3E%3Crect x=\'200\' y=\'40\' width=\'300\' height=\'160\' rx=\'16\' fill=\'%2300c6ff\' opacity=\'0.07\'/%3E%3Ctext x=\'350\' y=\'200\' text-anchor=\'middle\' fill=\'%2300c6ff\' font-size=\'13\' font-family=\'monospace\' opacity=\'0.4\'%3ELuminary%3C/text%3E%3C/svg%3E',
+      'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'700\' height=\'240\' viewBox=\'0 0 700 240\'%3E%3Crect width=\'700\' height=\'240\' fill=\'%230a0a1a\'/%3E%3Ccircle cx=\'350\' cy=\'100\' r=\'60\' fill=\'%236e8eff\' opacity=\'0.08\'/%3E%3Ctext x=\'350\' y=\'200\' text-anchor=\'middle\' fill=\'%236e8eff\' font-size=\'13\' font-family=\'monospace\' opacity=\'0.4\'%3ENeuralChat%3C/text%3E%3C/svg%3E',
+      'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'700\' height=\'240\' viewBox=\'0 0 700 240\'%3E%3Crect width=\'700\' height=\'240\' fill=\'%230a0f1a\'/%3E%3Crect x=\'60\' y=\'60\' width=\'240\' height=\'120\' rx=\'10\' fill=\'%2300c6ff\' opacity=\'0.06\'/%3E%3Ctext x=\'350\' y=\'200\' text-anchor=\'middle\' fill=\'%2300c6ff\' font-size=\'13\' font-family=\'monospace\' opacity=\'0.4\'%3EFinflow%3C/text%3E%3C/svg%3E',
+    ];
+    document.getElementById('mImg').src = svgs[idx];
+    document.getElementById('mImg').alt = p.title;
+    document.getElementById('mTitle').textContent = p.title;
+    document.getElementById('mDesc').textContent = p.desc;
+    document.getElementById('mDemo').href = p.demo;
+    document.getElementById('mSource').href = p.source;
+    var tagsEl = document.getElementById('mTags');
+    tagsEl.innerHTML = p.tags.map(function(t){ return '<span class="tag">'+t+'</span>'; }).join('');
+    var featsEl = document.getElementById('mFeatures');
+    featsEl.innerHTML = p.features.map(function(f){
+      return '<div class="modal-feature"><div class="modal-feat-icon">'+f.icon+'</div><p style="font-size:14px;color:var(--text-secondary);line-height:1.6;">'+f.text+'</p></div>';
+    }).join('');
+    document.getElementById('projModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('projModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function handleBackdropClick(e) {
+    if (e.target === document.getElementById('projModal')) closeModal();
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeModal();
+  });
+
+</script><script>
+  // THEME
+  const html = document.documentElement;
+  if (localStorage.getItem('theme') === 'light') html.classList.add('light');
+  document.getElementById('themeToggle').addEventListener('click', function() {
+    html.classList.toggle('light');
+    localStorage.setItem('theme', html.classList.contains('light') ? 'light' : 'dark');
+  });
+
+  // MOBILE MENU
+  document.getElementById('menuBtn').addEventListener('click', function() {
+    document.getElementById('mobileMenu').classList.toggle('hidden');
+  });
+  function closeMobile() { document.getElementById('mobileMenu').classList.add('hidden'); }
+
+  // SMOOTH SCROLL
+  document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      var t = document.querySelector(a.getAttribute('href'));
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+
+  // REVEAL
+  var ro = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(function(el) { ro.observe(el); });
+
+  // PARALLAX
+  var pts = [
+    { el: document.querySelector('.orb-1'), speed: 0.12 },
+    { el: document.querySelector('.orb-2'), speed: -0.08 },
+    { el: document.querySelector('.orb-3'), speed: 0.06 },
+    { el: document.querySelector('#hero h1'), speed: 0.04 }
+  ].filter(function(t) { return t.el; });
+  var tick = false;
+  window.addEventListener('scroll', function() {
+    if (!tick) {
+      requestAnimationFrame(function() {
+        var y = window.scrollY;
+        pts.forEach(function(p) { p.el.style.transform = 'translateY(' + (y * p.speed) + 'px)'; });
+        tick = false;
+      });
+      tick = true;
+    }
+  }, { passive: true });
+
+  // MARQUEE
+  var R1 = [
+    { icon: '&#9883;', label: 'React' },
+    { icon: '&#9650;', label: 'Next.js' },
+    { icon: '&#128310;', label: 'TypeScript' },
+    { icon: '&#127912;', label: 'Tailwind CSS' },
+    { icon: '&#127758;', label: 'Three.js' },
+    { icon: '&#128444;', label: 'Figma' },
+    { icon: '&#128293;', label: 'Vite' },
+    { icon: '&#128230;', label: 'Webpack' },
+    { icon: '&#129514;', label: 'Vitest' },
+    { icon: '&#127917;', label: 'Playwright' }
+  ];
+  var R2 = [
+    { icon: '&#128994;', label: 'Node.js' },
+    { icon: '&#128013;', label: 'Python' },
+    { icon: '&#128024;', label: 'PostgreSQL' },
+    { icon: '&#128308;', label: 'Redis' },
+    { icon: '&#128225;', label: 'GraphQL' },
+    { icon: '&#128051;', label: 'Docker' },
+    { icon: '&#9729;', label: 'AWS' },
+    { icon: '&#128640;', label: 'Vercel' },
+    { icon: '&#9889;', label: 'FastAPI' },
+    { icon: '&#128279;', label: 'Prisma' }
+  ];
+  var R3 = [
+    { icon: '&#129302;', label: 'OpenAI API' },
+    { icon: '&#128179;', label: 'Stripe' },
+    { icon: '&#128202;', label: 'D3.js' },
+    { icon: '&#128449;', label: 'Supabase' },
+    { icon: '&#129408;', label: 'Rust' },
+    { icon: '&#128241;', label: 'React Native' },
+    { icon: '&#128295;', label: 'GitHub Actions' },
+    { icon: '&#128218;', label: 'Storybook' },
+    { icon: '&#127950;', label: 'Turborepo' },
+    { icon: '&#127754;', label: 'Framer Motion' }
+  ];
+
+  function buildMarquee(id, items) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var all = items.concat(items).concat(items);
+    el.innerHTML = all.map(function(s) {
+      return '<div class="skill-pill"><span class="pill-icon">' + s.icon + '</span>' + s.label + '</div>';
+    }).join('');
+  }
+
+  buildMarquee('mq1', R1);
+  buildMarquee('mq2', R2);
+  buildMarquee('mq3', R3);
+
+  // CONTACT
+  function sendMessage() {
+    var name = document.getElementById('fname').value.trim();
+    var email = document.getElementById('femail').value.trim();
+    var msg = document.getElementById('fmsg').value.trim();
+    if (!name || !email || !msg) { alert('Please fill in name, email and message.'); return; }
+    var btn = document.getElementById('sendBtn');
+    btn.textContent = 'Sending\u2026'; btn.disabled = true;
+    setTimeout(function() {
+      document.getElementById('successMsg').style.display = 'block';
+      ['fname','femail','fsubject','fmsg'].forEach(function(id) { document.getElementById(id).value = ''; });
+      btn.textContent = 'Send Message'; btn.disabled = false;
+      setTimeout(function() { document.getElementById('successMsg').style.display = 'none'; }, 4000);
+    }, 1200);
+  }
+
+  // HERO R
