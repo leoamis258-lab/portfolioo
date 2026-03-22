@@ -207,6 +207,29 @@
       transition: transform 0.05s linear;
     }
 
+
+    /* ===== BACK TO TOP ===== */
+    #back-to-top {
+      position: fixed; bottom: 32px; right: 32px; z-index: 400;
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-a), var(--accent-b));
+      border: none; cursor: pointer; color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 24px rgba(110,142,255,0.45);
+      opacity: 0; transform: translateY(16px) scale(0.85);
+      transition: opacity 0.3s, transform 0.3s cubic-bezier(.22,1,.36,1);
+      pointer-events: none;
+    }
+    #back-to-top.visible {
+      opacity: 1; transform: translateY(0) scale(1);
+      pointer-events: all;
+    }
+    #back-to-top:hover {
+      transform: translateY(-4px) scale(1.1);
+      box-shadow: 0 8px 32px rgba(110,142,255,0.6);
+    }
+    #back-to-top:active { transform: scale(0.95); }
+
     @media (max-width: 640px) { .orb { display: none; } }
 
     /* === MODAL === */
@@ -881,6 +904,14 @@
     ticking = false;
     var docH = document.documentElement.scrollHeight - window.innerHeight;
 
+
+    // Back to top visibility
+    var btt = document.getElementById('back-to-top');
+    if (btt) {
+      if (scrollY > 400) btt.classList.add('visible');
+      else btt.classList.remove('visible');
+    }
+
     // 1. Progress bar
     var pct = docH > 0 ? (scrollY / docH) * 100 : 0;
     var pb = document.getElementById('scroll-progress');
@@ -1193,5 +1224,11 @@
 
 })();
 </script>
+<!-- BACK TO TOP -->
+<button id="back-to-top" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="18 15 12 9 6 15"/>
+  </svg>
+</button>
 </body>
 </html>
