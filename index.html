@@ -52,30 +52,41 @@ img{display:block;max-width:100%}
 
 .page{max-width:672px;margin:0 auto;padding:48px 24px 80px}
 
-/* ── TOPBAR (theme toggle) ── */
+/* ── TOPBAR ── */
 .topbar{display:flex;justify-content:flex-end;margin-bottom:36px}
-.toggle-wrap{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--text-3)}
-.toggle{position:relative;width:44px;height:24px;cursor:pointer}
-.toggle input{opacity:0;width:0;height:0;position:absolute}
-.toggle-track{
-  position:absolute;inset:0;
-  background:var(--toggle-bg);
-  border-radius:100px;
+
+/* pill toggle */
+.theme-pill{
+  display:flex;align-items:center;gap:0;
+  background:var(--bg-card);
   border:1px solid var(--border);
-  transition:background .3s,border-color .3s;
+  border-radius:100px;
+  padding:3px;
+  cursor:pointer;
+  transition:border-color .2s;
+  user-select:none;
 }
-.toggle-knob{
-  position:absolute;
-  top:3px;left:3px;
-  width:16px;height:16px;
-  border-radius:50%;
-  background:var(--toggle-knob);
-  transition:transform .3s,background .3s;
-  display:flex;align-items:center;justify-content:center;
-  font-size:9px;
+.theme-pill:hover{border-color:var(--border-hl)}
+.pill-opt{
+  display:flex;align-items:center;gap:5px;
+  padding:5px 12px;
+  border-radius:100px;
+  font-size:12px;
+  font-weight:500;
+  color:var(--text-3);
+  transition:background .25s,color .25s;
+  white-space:nowrap;
 }
-[data-theme="light"] .toggle-knob{transform:translateX(20px)}
-.toggle-icon{font-size:13px;user-select:none}
+.pill-opt svg{width:13px;height:13px;flex-shrink:0}
+.pill-opt.active{
+  background:var(--bg-hover);
+  color:var(--text);
+  border:1px solid var(--border-hl);
+}
+[data-theme="dark"]  .pill-dark  { background:var(--bg-hover); color:var(--text); border:1px solid var(--border-hl); }
+[data-theme="dark"]  .pill-light { background:transparent; color:var(--text-3); border:1px solid transparent; }
+[data-theme="light"] .pill-light { background:var(--bg-hover); color:var(--text); border:1px solid var(--border-hl); }
+[data-theme="light"] .pill-dark  { background:transparent; color:var(--text-3); border:1px solid transparent; }
 
 /* ── AVATAR ── */
 .avatar-wrap{
@@ -187,16 +198,30 @@ img{display:block;max-width:100%}
 .cc-lbl{font-size:11px;color:var(--text-3);margin-bottom:4px}
 .cc-val{font-size:12px;color:var(--text-2);font-weight:500}
 
-.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px}
-.gi{aspect-ratio:1;border-radius:8px;background:var(--bg-card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-3);font-size:24px}
-.gi:nth-child(1){grid-column:span 2;aspect-ratio:2/1}
+/* GALLERY CAROUSEL */
+.gallery-outer{position:relative;margin-top:12px}
+.gallery-track-wrap{overflow:hidden;border-radius:10px}
+.gallery-track{display:flex;gap:10px;transition:transform .4s cubic-bezier(.4,0,.2,1);will-change:transform}
+.gallery-slide{flex:0 0 calc(25% - 8px);aspect-ratio:3/4;border-radius:10px;overflow:hidden;background:var(--bg-card);border:1px solid var(--border);flex-shrink:0}
+.gallery-slide img{width:100%;height:100%;object-fit:cover;display:block}
+.gallery-slide .ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--text-3)}
+.gal-btn{position:absolute;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:var(--bg-card);border:1px solid var(--border-hl);color:var(--text-2);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;font-size:15px;user-select:none;transition:background .15s,color .15s}
+.gal-btn:hover{background:var(--bg-hover);color:var(--text)}
+.gal-btn:disabled{opacity:.2;cursor:default}
+.gal-btn.prev{left:-16px}
+.gal-btn.next{right:-16px}
+.gal-dots{display:none;justify-content:center;gap:6px;margin-top:10px}
+.gal-dot{width:6px;height:6px;border-radius:50%;background:var(--border-hl);cursor:pointer;transition:background .2s}
+.gal-dot.active{background:var(--text-2)}
 
 .footer{margin-top:48px;padding-top:24px;border-top:1px solid var(--border);font-size:12px;color:var(--text-3);text-align:center}
 
-@media(max-width:520px){
+@media(max-width:600px){
   .contact-row{grid-template-columns:1fr 1fr}
-  .gallery{grid-template-columns:repeat(2,1fr)}
-  .gi:nth-child(1){grid-column:span 2}
+  .gallery-slide{flex:0 0 100%}
+  .gal-btn.prev{left:8px}
+  .gal-btn.next{right:8px}
+  .gal-dots{display:flex}
 }
 </style>
 </head>
@@ -205,35 +230,32 @@ img{display:block;max-width:100%}
 
   <!-- ── TOPBAR: THEME TOGGLE ── -->
   <div class="topbar">
-    <div class="toggle-wrap">
-      <span class="toggle-icon" id="theme-icon">🌙</span>
-      <label class="toggle" title="Toggle light/dark mode">
-        <input type="checkbox" id="theme-toggle">
-        <span class="toggle-track"></span>
-        <span class="toggle-knob"></span>
-      </label>
-      <span class="toggle-icon">☀️</span>
+    <div class="theme-pill" id="theme-pill" onclick="switchTheme()">
+      <div class="pill-opt pill-dark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
+        Dark
+      </div>
+      <div class="pill-opt pill-light">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        Light
+      </div>
     </div>
   </div>
 
   <!-- ── PROFILE ── -->
   <div style="margin-bottom:32px">
 
-    <!-- Avatar with two swappable images -->
+    <!-- Avatar: swaps between dark and light mode photo -->
     <div class="avatar-wrap">
       <span class="avatar-initials">YN</span>
-      <!-- DARK MODE photo — replace src with your dark-mode photo URL -->
-      <img
-        class="avatar-dark"
-        src="https://ui-avatars.com/api/?name=Your+Name&background=2a2a2a&color=ededed&size=144&bold=true&font-size=0.4"
-        alt="Profile photo (dark)"
-      >
-      <!-- LIGHT MODE photo — replace src with your light-mode photo URL -->
-      <img
-        class="avatar-light"
-        src="https://ui-avatars.com/api/?name=Your+Name&background=e8e8e8&color=111111&size=144&bold=true&font-size=0.4"
-        alt="Profile photo (light)"
-      >
+      <!-- 🌙 DARK MODE photo — replace with your actual photo URL -->
+      <img class="avatar-dark"
+        src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=144&h=144&fit=crop&crop=face"
+        alt="Profile photo dark mode">
+      <!-- ☀️ LIGHT MODE photo — replace with your actual photo URL -->
+      <img class="avatar-light"
+        src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=144&h=144&fit=crop&crop=face"
+        alt="Profile photo light mode">
     </div>
 
     <div class="name">Your Name</div>
@@ -394,11 +416,23 @@ img{display:block;max-width:100%}
   <!-- ── GALLERY ── -->
   <div class="sec">
     <div class="sec-title">Gallery</div>
-    <div class="gallery">
-      <div class="gi">🖼</div><div class="gi">📸</div>
-      <div class="gi">🎤</div><div class="gi">💻</div>
-      <div class="gi">🏆</div><div class="gi">🌏</div>
-      <div class="gi">👨‍💻</div><div class="gi">🚀</div><div class="gi">✨</div>
+    <div class="gallery-outer">
+      <button class="gal-btn prev" id="gal-prev" onclick="galMove(-1)">&#8592;</button>
+      <button class="gal-btn next" id="gal-next" onclick="galMove(1)">&#8594;</button>
+      <div class="gallery-track-wrap">
+        <div class="gallery-track" id="gal-track">
+          <!-- Replace these src values with your real photo URLs -->
+          <div class="gallery-slide"><div class="ph">📸</div></div>
+          <div class="gallery-slide"><div class="ph">🎤</div></div>
+          <div class="gallery-slide"><div class="ph">🏆</div></div>
+          <div class="gallery-slide"><div class="ph">💻</div></div>
+          <div class="gallery-slide"><div class="ph">🌏</div></div>
+          <div class="gallery-slide"><div class="ph">👨‍💻</div></div>
+          <div class="gallery-slide"><div class="ph">🚀</div></div>
+          <div class="gallery-slide"><div class="ph">✨</div></div>
+        </div>
+      </div>
+      <div class="gal-dots" id="gal-dots"></div>
     </div>
   </div>
 
@@ -406,19 +440,67 @@ img{display:block;max-width:100%}
 </div>
 
 <script>
-  const toggle = document.getElementById('theme-toggle');
-  const html   = document.documentElement;
-
-  // Init from saved preference
+  // ── THEME TOGGLE ──
+  const html  = document.documentElement;
   const saved = localStorage.getItem('theme') || 'dark';
   html.setAttribute('data-theme', saved);
-  toggle.checked = saved === 'light';
 
-  toggle.addEventListener('change', () => {
-    const next = toggle.checked ? 'light' : 'dark';
+  function switchTheme() {
+    const current = html.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
     html.setAttribute('data-theme', next);
     localStorage.setItem('theme', next);
-  });
+  }
+  window.switchTheme = switchTheme;
+
+  // ── GALLERY CAROUSEL ──
+  const track    = document.getElementById('gal-track');
+  const dotsWrap = document.getElementById('gal-dots');
+  const btnPrev  = document.getElementById('gal-prev');
+  const btnNext  = document.getElementById('gal-next');
+  const slides   = track.querySelectorAll('.gallery-slide');
+  let current    = 0;
+
+  function getVisible() {
+    return window.innerWidth <= 600 ? 1 : 4;
+  }
+
+  function totalSteps() {
+    return Math.max(0, slides.length - getVisible());
+  }
+
+  function buildDots() {
+    dotsWrap.innerHTML = '';
+    const steps = totalSteps() + 1;
+    for (let i = 0; i <= totalSteps(); i++) {
+      const d = document.createElement('span');
+      d.className = 'gal-dot' + (i === current ? ' active' : '');
+      d.onclick = () => goTo(i);
+      dotsWrap.appendChild(d);
+    }
+  }
+
+  function goTo(idx) {
+    current = Math.max(0, Math.min(idx, totalSteps()));
+    const vis    = getVisible();
+    const slideW = track.parentElement.offsetWidth;
+    const gap    = 10;
+    const itemW  = (slideW - gap * (vis - 1)) / vis;
+    track.style.transform = `translateX(-${current * (itemW + gap)}px)`;
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current >= totalSteps();
+    document.querySelectorAll('.gal-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+  }
+
+  function galMove(dir) { goTo(current + dir); }
+  window.galMove = galMove;
+
+  buildDots();
+  goTo(0);
+  window.addEventListener('resize', () => { buildDots(); goTo(Math.min(current, totalSteps())); });
+
 </script>
 </body>
 </html>
