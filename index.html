@@ -755,119 +755,296 @@
   </div>
 </footer>
 
+
 <script>
-  // THEME
-  const html = document.documentElement;
-  if (localStorage.getItem('theme') === 'light') html.classList.add('light');
-  document.getElementById('themeToggle').addEventListener('click', function() {
-    html.classList.toggle('light');
-    localStorage.setItem('theme', html.classList.contains('light') ? 'light' : 'dark');
-  });
+(function() {
+  // ── THEME TOGGLE ─────────────────────────────────────────────────────────
+  var html = document.documentElement;
 
-  // MOBILE MENU
-  document.getElementById('menuBtn').addEventListener('click', function() {
-    document.getElementById('mobileMenu').classList.toggle('hidden');
-  });
-  function closeMobile() { document.getElementById('mobileMenu').classList.add('hidden'); }
+  // Apply saved theme immediately (before paint)
+  var saved = localStorage.getItem('theme');
+  if (saved === 'light') html.classList.add('light');
 
-  // SMOOTH SCROLL
-  document.querySelectorAll('a[href^="#"]').forEach(function(a) {
-    a.addEventListener('click', function(e) {
-      var t = document.querySelector(a.getAttribute('href'));
-      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
-    });
-  });
-
-  // REVEAL
-  var ro = new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-  document.querySelectorAll('.reveal').forEach(function(el) { ro.observe(el); });
-
-  // PARALLAX
-  var pts = [
-    { el: document.querySelector('.orb-1'), speed: 0.12 },
-    { el: document.querySelector('.orb-2'), speed: -0.08 },
-    { el: document.querySelector('.orb-3'), speed: 0.06 },
-    { el: document.querySelector('#hero h1'), speed: 0.04 }
-  ].filter(function(t) { return t.el; });
-  var tick = false;
-  window.addEventListener('scroll', function() {
-    if (!tick) {
-      requestAnimationFrame(function() {
-        var y = window.scrollY;
-        pts.forEach(function(p) { p.el.style.transform = 'translateY(' + (y * p.speed) + 'px)'; });
-        tick = false;
-      });
-      tick = true;
+  function applyTheme(isLight) {
+    if (isLight) {
+      html.classList.add('light');
+      localStorage.setItem('theme', 'light');
+    } else {
+      html.classList.remove('light');
+      localStorage.setItem('theme', 'dark');
     }
-  }, { passive: true });
+  }
 
-  // MARQUEE
-  var R1 = [
-    { icon: '⚛', label: 'React' },
-    { icon: '▲', label: 'Next.js' },
-    { icon: '🔷', label: 'TypeScript' },
-    { icon: '🎨', label: 'Tailwind CSS' },
-    { icon: '🌐', label: 'Three.js' },
-    { icon: '🖼', label: 'Figma' },
-    { icon: '🔥', label: 'Vite' },
-    { icon: '📦', label: 'Webpack' },
-    { icon: '🧪', label: 'Vitest' },
-    { icon: '🎭', label: 'Playwright' }
-  ];
-  var R2 = [
-    { icon: '🟢', label: 'Node.js' },
-    { icon: '🐍', label: 'Python' },
-    { icon: '🐘', label: 'PostgreSQL' },
-    { icon: '🔴', label: 'Redis' },
-    { icon: '📡', label: 'GraphQL' },
-    { icon: '🐳', label: 'Docker' },
-    { icon: '☁', label: 'AWS' },
-    { icon: '🚀', label: 'Vercel' },
-    { icon: '⚡', label: 'FastAPI' },
-    { icon: '🔗', label: 'Prisma' }
-  ];
-  var R3 = [
-    { icon: '🤖', label: 'OpenAI API' },
-    { icon: '💳', label: 'Stripe' },
-    { icon: '📊', label: 'D3.js' },
-    { icon: '🗄', label: 'Supabase' },
-    { icon: '🦀', label: 'Rust' },
-    { icon: '📱', label: 'React Native' },
-    { icon: '🔧', label: 'GitHub Actions' },
-    { icon: '📚', label: 'Storybook' },
-    { icon: '🏎', label: 'Turborepo' },
-    { icon: '🌊', label: 'Framer Motion' }
+  document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('themeToggle');
+    if (btn) {
+      btn.addEventListener('click', function() {
+        applyTheme(!html.classList.contains('light'));
+      });
+    }
+
+    // ── MOBILE MENU ───────────────────────────────────────────────────────
+    var menuBtn = document.getElementById('menuBtn');
+    var mobileMenu = document.getElementById('mobileMenu');
+    if (menuBtn && mobileMenu) {
+      menuBtn.addEventListener('click', function() {
+        mobileMenu.classList.toggle('hidden');
+      });
+    }
+
+    // ── SMOOTH SCROLL ─────────────────────────────────────────────────────
+    document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+      a.addEventListener('click', function(e) {
+        var id = a.getAttribute('href');
+        var target = document.querySelector(id);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth' });
+          if (mobileMenu) mobileMenu.classList.add('hidden');
+        }
+      });
+    });
+
+    // ── MARQUEE ───────────────────────────────────────────────────────────
+    var R1 = [
+      { icon: '⚛', label: 'React' },
+      { icon: '▲', label: 'Next.js' },
+      { icon: '🔷', label: 'TypeScript' },
+      { icon: '🎨', label: 'Tailwind CSS' },
+      { icon: '🌐', label: 'Three.js' },
+      { icon: '🖼', label: 'Figma' },
+      { icon: '🔥', label: 'Vite' },
+      { icon: '📦', label: 'Webpack' },
+      { icon: '🧪', label: 'Vitest' },
+      { icon: '🎭', label: 'Playwright' }
+    ];
+    var R2 = [
+      { icon: '🟢', label: 'Node.js' },
+      { icon: '🐍', label: 'Python' },
+      { icon: '🐘', label: 'PostgreSQL' },
+      { icon: '🔴', label: 'Redis' },
+      { icon: '📡', label: 'GraphQL' },
+      { icon: '🐳', label: 'Docker' },
+      { icon: '☁️', label: 'AWS' },
+      { icon: '🚀', label: 'Vercel' },
+      { icon: '⚡', label: 'FastAPI' },
+      { icon: '🔗', label: 'Prisma' }
+    ];
+    var R3 = [
+      { icon: '🤖', label: 'OpenAI API' },
+      { icon: '💳', label: 'Stripe' },
+      { icon: '📊', label: 'D3.js' },
+      { icon: '🗄️', label: 'Supabase' },
+      { icon: '🦀', label: 'Rust' },
+      { icon: '📱', label: 'React Native' },
+      { icon: '🔧', label: 'GitHub Actions' },
+      { icon: '📚', label: 'Storybook' },
+      { icon: '🏎️', label: 'Turborepo' },
+      { icon: '🌊', label: 'Framer Motion' }
+    ];
+
+    function buildMarquee(id, items) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      // triple duplicate for seamless infinite loop
+      var all = items.concat(items).concat(items);
+      el.innerHTML = all.map(function(s) {
+        return '<div class="skill-pill"><span class="pill-icon">' + s.icon + '</span>' + s.label + '</div>';
+      }).join('');
+    }
+
+    buildMarquee('mq1', R1);
+    buildMarquee('mq2', R2);
+    buildMarquee('mq3', R3);
+
+    // ── PARALLAX ──────────────────────────────────────────────────────────
+    var pts = [
+      { el: document.querySelector('.orb-1'), speed: 0.12 },
+      { el: document.querySelector('.orb-2'), speed: -0.08 },
+      { el: document.querySelector('.orb-3'), speed: 0.06 },
+      { el: document.querySelector('#hero h1'), speed: 0.04 }
+    ].filter(function(t) { return t.el; });
+
+    var ticking = false;
+    window.addEventListener('scroll', function() {
+      if (!ticking) {
+        requestAnimationFrame(function() {
+          var y = window.scrollY;
+          pts.forEach(function(p) {
+            p.el.style.transform = 'translateY(' + (y * p.speed) + 'px)';
+          });
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+
+    // ── CONTACT FORM ──────────────────────────────────────────────────────
+    var sendBtn = document.getElementById('sendBtn');
+    if (sendBtn) {
+      sendBtn.addEventListener('click', function() {
+        var name  = (document.getElementById('fname')   || {}).value || '';
+        var email = (document.getElementById('femail')  || {}).value || '';
+        var msg   = (document.getElementById('fmsg')    || {}).value || '';
+        if (!name.trim() || !email.trim() || !msg.trim()) {
+          alert('Please fill in name, email and message.');
+          return;
+        }
+        sendBtn.textContent = 'Sending…';
+        sendBtn.disabled = true;
+        setTimeout(function() {
+          var ok = document.getElementById('successMsg');
+          if (ok) ok.style.display = 'block';
+          ['fname','femail','fsubject','fmsg'].forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) el.value = '';
+          });
+          sendBtn.textContent = 'Send Message';
+          sendBtn.disabled = false;
+          setTimeout(function() {
+            if (ok) ok.style.display = 'none';
+          }, 4000);
+        }, 1200);
+      });
+    }
+
+    // ── REVEAL ON SCROLL ──────────────────────────────────────────────────
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting) {
+            e.target.style.opacity = '1';
+            e.target.style.transform = 'translateY(0)';
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.reveal').forEach(function(el) { io.observe(el); });
+    }
+
+  }); // end DOMContentLoaded
+
+  // ── PROJECT MODAL ─────────────────────────────────────────────────────────
+  var PROJECTS = [
+    {
+      title: 'Analytics Pro Dashboard',
+      tags: ['React', 'D3.js', 'Node.js', 'PostgreSQL'],
+      desc: 'A comprehensive real-time analytics platform built for SaaS businesses. Processes over 1M events/day with sub-100ms query response, featuring live user segmentation, funnel analysis, and AI-powered anomaly detection.',
+      features: [
+        { icon: '📊', text: 'Interactive charts with 15+ visualization types powered by D3.js' },
+        { icon: '⚡', text: 'Real-time event streaming via WebSocket with Redis pub/sub' },
+        { icon: '🤖', text: 'AI anomaly detection using statistical z-score analysis' },
+        { icon: '👥', text: 'Role-based access control with team workspaces' }
+      ],
+      demo: '#', source: '#'
+    },
+    {
+      title: 'Wandermap Travel App',
+      tags: ['Next.js', 'Mapbox GL', 'Supabase', 'OpenAI'],
+      desc: 'An AI-powered travel planning app that generates personalized itineraries based on your travel style, budget, and interests. Features 3D interactive maps, live weather overlays, and a community of 50k+ travellers.',
+      features: [
+        { icon: '🗺️', text: 'Mapbox GL 3D terrain maps with custom POI layers' },
+        { icon: '🌤️', text: 'Real-time weather overlays using Open-Meteo API' },
+        { icon: '✈️', text: 'AI itinerary generation with GPT-4 fine-tuned on travel data' },
+        { icon: '📸', text: 'Community photo pins geotagged to itinerary stops' }
+      ],
+      demo: '#', source: '#'
+    },
+    {
+      title: 'Luminary E-Commerce',
+      tags: ['React', 'Stripe', 'PostgreSQL', 'Node.js'],
+      desc: 'A full-featured headless e-commerce platform with glassmorphic UI. Handles inventory, subscriptions, and one-time purchases with a seamless checkout flow including 3D Secure and automatic retries.',
+      features: [
+        { icon: '💳', text: 'Stripe: subscriptions, one-time payments, 3DS, saved cards' },
+        { icon: '📦', text: 'Real-time inventory management with low-stock alerts' },
+        { icon: '🔍', text: 'Full-text product search with faceted filtering' },
+        { icon: '📧', text: 'Automated order and shipping emails via Resend' }
+      ],
+      demo: '#', source: '#'
+    },
+    {
+      title: 'NeuralChat AI Assistant',
+      tags: ['OpenAI API', 'WebSocket', 'Redis', 'React'],
+      desc: 'A streaming AI chat interface supporting multi-turn conversations with persistent memory. Routes queries to the most cost-effective model and supports tool use including web search and code execution.',
+      features: [
+        { icon: '🧠', text: 'Persistent memory with vector embeddings in pgvector' },
+        { icon: '🔀', text: 'Smart model routing: GPT-4o vs GPT-4o-mini based on complexity' },
+        { icon: '🛠️', text: 'Tool use: live search, Python sandbox, PDF reading' },
+        { icon: '⌨️', text: 'Streaming responses with token-by-token rendering via SSE' }
+      ],
+      demo: '#', source: '#'
+    },
+    {
+      title: 'Finflow Budget Tracker',
+      tags: ['Vue 3', 'FastAPI', 'Chart.js', 'PostgreSQL'],
+      desc: 'A personal finance app that auto-categorizes transactions with ML and forecasts future spending. Features Chart.js visualizations, monthly reports, and smart saving goal recommendations.',
+      features: [
+        { icon: '🏦', text: 'Bank sync via Plaid — 11,000+ financial institutions' },
+        { icon: '🏷️', text: 'ML transaction categorization with 94% accuracy' },
+        { icon: '📈', text: 'Spending forecasts using linear regression on 12-month history' },
+        { icon: '🎯', text: 'Saving goals with progress tracking and milestone alerts' }
+      ],
+      demo: '#', source: '#'
+    }
   ];
 
-  function buildMarquee(id, items) {
-    var el = document.getElementById(id);
-    if (!el) return;
-    var all = items.concat(items).concat(items);
-    el.innerHTML = all.map(function(s) {
-      return '<div class="skill-pill"><span class="pill-icon">' + s.icon + '</span>' + s.label + '</div>';
+  window.openModal = function(idx) {
+    var p = PROJECTS[idx];
+    document.getElementById('mTitle').textContent = p.title;
+    document.getElementById('mDesc').textContent  = p.desc;
+    document.getElementById('mDemo').href   = p.demo;
+    document.getElementById('mSource').href = p.source;
+    document.getElementById('mTags').innerHTML = p.tags.map(function(t) {
+      return '<span class="tag">' + t + '</span>';
     }).join('');
-  }
+    document.getElementById('mFeatures').innerHTML = p.features.map(function(f) {
+      return '<div class="modal-feature"><div class="modal-feat-icon">' + f.icon + '</div>' +
+             '<p style="font-size:14px;color:var(--text-secondary);line-height:1.6;">' + f.text + '</p></div>';
+    }).join('');
+    var bd = document.getElementById('projModal');
+    bd.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
 
-  buildMarquee('mq1', R1);
-  buildMarquee('mq2', R2);
-  buildMarquee('mq3', R3);
+  window.closeModal = function() {
+    document.getElementById('projModal').classList.remove('open');
+    document.body.style.overflow = '';
+  };
 
-  // CONTACT
-  function sendMessage() {
-    var name = document.getElementById('fname').value.trim();
-    var email = document.getElementById('femail').value.trim();
-    var msg = document.getElementById('fmsg').value.trim();
-    if (!name || !email || !msg) { alert('Please fill in name, email and message.'); return; }
+  window.handleBackdropClick = function(e) {
+    if (e.target === document.getElementById('projModal')) window.closeModal();
+  };
+
+  window.sendMessage = function() {
+    var name  = (document.getElementById('fname')  || {}).value || '';
+    var email = (document.getElementById('femail') || {}).value || '';
+    var msg   = (document.getElementById('fmsg')   || {}).value || '';
+    if (!name.trim() || !email.trim() || !msg.trim()) {
+      alert('Please fill in name, email and message.'); return;
+    }
     var btn = document.getElementById('sendBtn');
-    btn.textContent = 'Sending\u2026'; btn.disabled = true;
+    btn.textContent = 'Sending…'; btn.disabled = true;
     setTimeout(function() {
-      document.getElementById('successMsg').style.display = 'block';
-      ['fname','femail','fsubject','fmsg'].forEach(function(id) { document.getElementById(id).value = ''; });
+      var ok = document.getElementById('successMsg');
+      if (ok) ok.style.display = 'block';
+      ['fname','femail','fsubject','fmsg'].forEach(function(id) {
+        var el = document.getElementById(id); if (el) el.value = '';
+      });
       btn.textContent = 'Send Message'; btn.disabled = false;
-      setTimeout(function() { document.getElementById('successMsg').style.display = 'none'; }, 4000);
+      setTimeout(function() { if (ok) ok.style.display = 'none'; }, 4000);
     }, 1200);
-  }
+  };
 
-  // HERO R
+  window.closeMobile = function() {
+    var m = document.getElementById('mobileMenu');
+    if (m) m.classList.add('hidden');
+  };
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') window.closeModal();
+  });
+
+})();
+</script>
+</body>
+</html>
